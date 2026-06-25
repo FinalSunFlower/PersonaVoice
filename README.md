@@ -4,7 +4,6 @@
 [![PyTorch 2.0+](https://img.shields.io/badge/PyTorch-2.0+-ee4c2c.svg)](https://pytorch.org/)
 [![Version 10.4.8](https://img.shields.io/badge/version-10.4.8--Trade--off-red.svg)](ARCHITECTURE.md)
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
-[![CI](https://github.com/personavoice/personavoice/actions/workflows/python-package.yml/badge.svg)](https://github.com/personavoice/personavoice/actions)
 
 **English** | **[中文](README_zh.md)**
 
@@ -47,6 +46,14 @@ Most zero-shot TTS systems assume ≥3s of reference audio (XTTS v2, CosyVoice, 
 - Reference audio impurity (breath, fricatives) dominates the cloning signal
 
 PersonaVoice is the first open-source system to systematically study this regime.
+
+### Interactive Web Demo
+
+Below is a screenshot of the PersonaVoice v10.4.8 interactive dashboard. Users upload a 1-second reference audio, optionally provide chat history or structured recollections, and obtain a cloned utterance together with a real-time Big-Five persona radar, mel-spectrogram visualization, and architecture condition inspection.
+
+<p align="center">
+  <img src="personavoice/picture/demo.png" alt="PersonaVoice v10.4.8 Interactive Demo" width="95%">
+</p>
 
 ---
 
@@ -133,63 +140,11 @@ Replaces legacy WebRTC VAD (GMM-based, harsh on breath/fricatives) with **Silero
 
 ## Architecture Overview
 
-```
-Input: [1-5s Audio] + [Chat History (opt)] + [Structured Recalls (opt)]
-                    │
-    ┌───────────────┼───────────────┐
-    │               │               │
-┌───▼──────┐  ┌─────▼──────┐  ┌────▼─────┐
-│ Silero   │  │ BERT Text  │  │ Persona  │
-│ VAD+RMS  │  │ Style      │  │ (64-d)   │
-└───┬──────┘  └─────┬──────┘  └────┬─────┘
-    │               │               │
-┌───▼──────┐        │               │
-│ ECAPA    │        │               │
-│ (192-d)  │        │               │
-└───┬──────┘        │               │
-    │               │               │
-    └───────────────┼───────────────┘
-                    │
-            ┌───────▼───────┐
-            │ ★ OES (B)     │  env_scale=0.1, env_weight=0
-            │ Orthogonal    │  Z_audio = Z_timbre + Z_env
-            │ Env Sub-manifold│
-            └───────┬───────┘
-                    │
-            ┌───────▼───────┐
-            │ ★ LAAG (A)    │  Dynamic chunking + dynamic CFG
-            │ Length-Aware  │  + dynamic FiLM activation
-            │ Adaptive Gen  │
-            └───────┬───────┘
-                    │
-            ┌───────▼───────┐
-            │ FiLM Adapter  │  γ = γ_net(persona), β = β_net(emotion)
-            │ (dynamic:     │  zero-init, short=off, long=on
-            │  short=off,   │
-            │  long=on)     │
-            └───────┬───────┘
-                    │
-            ┌───────▼───────┐
-            │  F5-TTS DiT   │  22 layers, first 20 frozen
-            │  (Flow Match) │  Official infer_batch_process
-            │  + Sway -1.0  │  CFG=2.5, steps=32
-            └───────┬───────┘
-                    │
-            ┌───────▼───────┐
-            │ ★ CEAG (C)    │  Code preserved (use_ceag=False)
-            │ Cross-Entropy │  Disabled in v10.4.7+ ablation
-            │ Attn Guidance │
-            └───────┬───────┘
-                    │
-            ┌───────▼───────┐
-            │ Vocos Vocoder │  → 24kHz WAV
-            └───────────────┘
+<p align="center">
+  <img src="personavoice/picture/en.png" alt="PersonaVoice Architecture" width="98%">
+</p>
 
-Removed: ✗ IBOP  ✗ AM-ODE  ✗ TD-CFG  ✗ SBM  ✗ GRPO
-         ✗ Duration Predictor (v10.3: F5 official formula)
-         ✗ Reference Enhancer (v10.4: hurts SECS)
-         ✗ Best-of-N (v10.4.7: manifold collapse is architectural)
-```
+The figure above illustrates the full inference pipeline of PersonaVoice v10.4.8. A 1-second reference audio is first pre-processed by **Silero VAD + RMS normalization**, then encoded by **ECAPA-TDNN** into a 192-d speaker embedding. Optional **chat history** and **structured recollections** are distilled by a BERT-based persona extractor into 64-d text-style and 64-d persona embeddings. The **OES** module decomposes the audio embedding into orthogonal timbre and environment components, while **LAAG** decides chunking strategy and FiLM activation based on text length. Finally, the frozen F5-TTS DiT blocks 0–19 plus two trainable blocks 20–21 generate the mel spectrogram, which is converted to 24 kHz waveform by the Vocos vocoder.
 
 > Full architecture details: [ARCHITECTURE.md](ARCHITECTURE.md)
 

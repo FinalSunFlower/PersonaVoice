@@ -4,7 +4,6 @@
 [![PyTorch 2.0+](https://img.shields.io/badge/PyTorch-2.0+-ee4c2c.svg)](https://pytorch.org/)
 [![Version 10.4.8](https://img.shields.io/badge/version-10.4.8--Trade--off-red.svg)](ARCHITECTURE.md)
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
-[![CI](https://github.com/personavoice/personavoice/actions/workflows/python-package.yml/badge.svg)](https://github.com/personavoice/personavoice/actions)
 
 **[English](README.md)** | **中文**
 
@@ -47,6 +46,14 @@ PersonaVoice 是一个**人格驱动的 1 秒极限声音克隆插件化 Adapter
 - 参考音频中的呼吸/摩擦音杂质主导克隆信号
 
 PersonaVoice 是首个系统研究 1 秒极限克隆场景的开源项目。
+
+### 交互式 Web 演示
+
+下面是 PersonaVoice v10.4.8 交互式 Dashboard 的截图。用户上传 1 秒参考音频后，可選填入聊天记录或结构化回忆，系统即可生成克隆语音，并实时展示 Big Five 人格雷达图、Mel 频谱可视化以及架构条件注入状态。
+
+<p align="center">
+  <img src="personavoice/picture/demo.png" alt="PersonaVoice v10.4.8 交互式演示" width="95%">
+</p>
 
 ---
 
@@ -133,62 +140,11 @@ persona + emotion 条件化的 FiLM 调制 DiT 隐藏层:
 
 ## 架构总览
 
-```
-输入: [1-5秒 音频] + [聊天记录 (可选)] + [结构化回忆 (可选)]
-                    │
-    ┌───────────────┼───────────────┐
-    │               │               │
-┌───▼──────┐  ┌─────▼──────┐  ┌────▼─────┐
-│ Silero   │  │ BERT 文本  │  │ Persona  │
-│ VAD+RMS  │  │ 风格编码   │  │ (64-d)   │
-└───┬──────┘  └─────┬──────┘  └────┬─────┘
-    │               │               │
-┌───▼──────┐        │               │
-│ ECAPA    │        │               │
-│ (192-d)  │        │               │
-└───┬──────┘        │               │
-    │               │               │
-    └───────────────┼───────────────┘
-                    │
-            ┌───────▼───────┐
-            │ ★ OES (B)     │  env_scale=0.1, env_weight=0
-            │ 正交环境       │  Z_audio = Z_timbre + Z_env
-            │ 子流形         │
-            └───────┬───────┘
-                    │
-            ┌───────▼───────┐
-            │ ★ LAAG (A)    │  动态 Chunking + 动态 CFG
-            │ 长度自适应生成 │  + 动态 FiLM 激活
-            └───────┬───────┘
-                    │
-            ┌───────▼───────┐
-            │ FiLM Adapter  │  γ = γ_net(persona), β = β_net(emotion)
-            │ (动态:        │  零初始化, 短文本=关, 长文本=开
-            │  短=关,       │
-            │  长=开)       │
-            └───────┬───────┘
-                    │
-            ┌───────▼───────┐
-            │  F5-TTS DiT   │  22 层, 前 20 层冻结
-            │  (Flow Match) │  官方 infer_batch_process
-            │  + Sway -1.0  │  CFG=2.5, steps=32
-            └───────┬───────┘
-                    │
-            ┌───────▼───────┐
-            │ ★ CEAG (C)    │  代码保留 (use_ceag=False)
-            │ 交叉熵注意力  │  v10.4.7+ 消融后禁用
-            │ 引导          │
-            └───────┬───────┘
-                    │
-            ┌───────▼───────┐
-            │ Vocos 声码器  │  → 24kHz WAV
-            └───────────────┘
+<p align="center">
+  <img src="personavoice/picture/cn.png" alt="PersonaVoice 架构图" width="98%">
+</p>
 
-已移除: ✗ IBOP  ✗ AM-ODE  ✗ TD-CFG  ✗ SBM  ✗ GRPO
-       ✗ Duration Predictor (v10.3: F5 官方公式)
-       ✗ Reference Enhancer (v10.4: 损害 SECS)
-       ✗ Best-of-N (v10.4.7: 流形塌缩是架构问题)
-```
+上图展示了 PersonaVoice v10.4.8 的完整推理流程。1 秒参考音频首先经过 **Silero VAD + RMS 归一化** 预处理，再由 **ECAPA-TDNN** 编码为 192 维说话人嵌入；可选的**聊天记录**和**结构化回忆**通过 BERT-based 人格提取器蒸馏为 64 维文本风格与 64 维人格嵌入。**OES** 模块将音频嵌入分解为正交的音色与环境分量，**LAAG** 根据文本长度决定分块策略与 FiLM 开关；最终冻结的 F5-TTS DiT 0–19 层与两个可训练块 20–21 生成 Mel 谱，经 Vocos 声码器转换为 24 kHz 波形。
 
 > 完整架构详情: [ARCHITECTURE.md](ARCHITECTURE.md)
 
