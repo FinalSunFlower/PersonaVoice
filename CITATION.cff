@@ -1,0 +1,33 @@
+cff-version: 1.2.0
+title: "PersonaVoice: Plug-in Adapters for Persona-Driven 1-Second Voice Cloning"
+message: "If you use PersonaVoice in your research, please cite it as below."
+type: software
+authors:
+  - alias: PersonaVoice Team
+repository-code: "https://github.com/personavoice/personavoice"
+version: "10.4.8"
+date-released: "2026-06-25"
+license: MIT
+keywords:
+  - voice-cloning
+  - zero-shot-tts
+  - few-shot-voice-cloning
+  - flow-matching
+  - F5-TTS
+  - speech-synthesis
+  - persona-driven-tts
+  - emotional-tts
+  - plug-in-adapter
+  - 1-second-cloning
+  - speaker-embedding
+  - ECAPA-TDNN
+  - orthogonal-decomposition
+  - length-adaptive-generation
+  - FiLM-modulation
+preferred-citation:
+  type: article
+  title: "PersonaVoice v10.4.8: Plug-in Adapters for Persona-Driven 1-Second Voice Cloning — A Trade-off Analysis of Timbre Fidelity and Text-Alignment Stability in Flow-Matching TTS"
+  authors:
+    - alias: PersonaVoice Team
+  year: 2026
+  notes: "Work in progress. arXiv preprint to appear."

@@ -1,0 +1,93 @@
+{
+  "full_v8": {
+    "secs_mean": 0.37735877685248853,
+    "secs_std": 0.23008808573848546,
+    "wer_mean": 0.20010105738701767,
+    "wer_std": 0.24853478255912095,
+    "n_samples": 200
+  },
+  "wo_td_cfg": {
+    "description": "移除 TD-CFG (使用静态 CFG=2.5)",
+    "secs_mean": 0.382478479584679,
+    "secs_std": 0.21992326225835473,
+    "wer_mean": 0.1970744175082262,
+    "wer_std": 0.24596377050841559,
+    "n_samples": 200,
+    "secs_paired_t_test": {
+      "mean_diff": -0.00511970273219049,
+      "std_diff": 0.08758198216632387,
+      "t_statistic": -0.8266943565438472,
+      "p_value": 0.4094004440804647,
+      "cohen_d": -0.05845611854808038,
+      "effect_size": "negligible",
+      "significant_at_alpha": false,
+      "n_pairs": 200
+    },
+    "wer_paired_t_test": {
+      "mean_diff": 0.0030266398787914695,
+      "std_diff": 0.13020403410902598,
+      "t_statistic": 0.3287390589927534,
+      "p_value": 0.7426986131735233,
+      "cohen_d": 0.023245361785466042,
+      "effect_size": "negligible",
+      "significant_at_alpha": false,
+      "n_pairs": 200
+    }
+  },
+  "wo_ibop": {
+    "description": "移除 IBOP (ibop_strength=0.0)",
+    "secs_mean": 0.37617946511832995,
+    "secs_std": 0.22683424682474146,
+    "wer_mean": 0.19425720010513914,
+    "wer_std": 0.23127875157973965,
+    "n_samples": 200,
+    "secs_paired_t_test": {
+      "mean_diff": 0.0011793117341585457,
+      "std_diff": 0.08696493456509533,
+      "t_statistic": 0.19177829053207213,
+      "p_value": 0.8481114208801144,
+      "cohen_d": 0.013560772971959208,
+      "effect_size": "negligible",
+      "significant_at_alpha": false,
+      "n_pairs": 200
+    },
+    "wer_paired_t_test": {
+      "mean_diff": 0.00584385728187854,
+      "std_diff": 0.1244724661015143,
+      "t_statistic": 0.6639590652815754,
+      "p_value": 0.507485035219549,
+      "cohen_d": 0.04694899574908836,
+      "effect_size": "negligible",
+      "significant_at_alpha": false,
+      "n_pairs": 200
+    }
+  },
+  "wo_sbm": {
+    "description": "移除 SBM 随机性 (sigma=0.0)",
+    "secs_mean": 0.37946658066473904,
+    "secs_std": 0.22655179989676424,
+    "wer_mean": 0.19883976222285626,
+    "wer_std": 0.24038398581887596,
+    "n_samples": 200,
+    "secs_paired_t_test": {
+      "mean_diff": -0.002107803812250495,
+      "std_diff": 0.08083554608217512,
+      "t_statistic": -0.36875915145993815,
+      "p_value": 0.7126992737498685,
+      "cohen_d": -0.026075209662191942,
+      "effect_size": "negligible",
+      "significant_at_alpha": false,
+      "n_pairs": 200
+    },
+    "wer_paired_t_test": {
+      "mean_diff": 0.0012612951641614756,
+      "std_diff": 0.13811092139080247,
+      "t_statistic": 0.1291527642673121,
+      "p_value": 0.8973672130954184,
+      "cohen_d": 0.009132479542240399,
+      "effect_size": "negligible",
+      "significant_at_alpha": false,
+      "n_pairs": 200
+    }
+  }
+}

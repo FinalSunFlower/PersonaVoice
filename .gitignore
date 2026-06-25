@@ -1,0 +1,99 @@
+# ============================================================
+# PersonaVoice .gitignore (v10.4.8)
+# ============================================================
+
+# ── Python ──
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+*.egg-info/
+.eggs/
+build/
+dist/
+.eggs/
+
+# ── Virtual Environments ──
+.venv/
+venv/
+env/
+ENV/
+ENV/
+
+# ── IDE / Editor ──
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+*.sublime-workspace
+*.sublime-project
+
+# ── OS ──
+.DS_Store
+Thumbs.db
+desktop.ini
+ehthumbs.db
+
+# ── Large Data Files (NOT for GitHub — download via scripts/download_models.py) ──
+data/LibriTTS/
+data/dev-clean.tar.gz
+data/dpo_preference_pairs.pt
+data/libritts_processed/
+data/*.pt
+data/*.tar.gz
+data/*.zip
+
+# ── Model Checkpoints (too large for GitHub — train locally) ──
+checkpoints/
+*.pt
+*.pth
+*.ckpt
+*.bin
+*.safetensors
+
+# ── Pretrained Models (download via scripts/download_models.py) ──
+pretrained_models/
+models/
+models/**
+
+# ── Experiment Temp Files ──
+tmp/
+tmp_*/
+*.tmp
+*.log
+logs/
+
+# ── Generated Audio Outputs (regenerable) ──
+outputs/
+outputs/**
+
+# ── Results: keep JSON + figures, ignore large audio samples ──
+results/subjective_eval_samples/
+results/pdfm_audio/
+results/*.wav
+results/*.mp3
+results/*.flac
+
+# ── Jupyter ──
+.ipynb_checkpoints/
+*.ipynb
+
+# ── Local Demo Audio (regenerable from 1111.mp3) ──
+# Keep 1111.mp3 / 1111.wav as bundled demo reference
+
+# ── Cache / HuggingFace cache (regenerable) ──
+.cache/
+.huggingface/
+*.cache
+
+# ── Coverage / Test Reports ──
+.coverage
+htmlcov/
+.pytest_cache/
+.tox/
+
+# ── Lock files (keep requirements.txt as source of truth) ──
+# poetry.lock
+# Pipfile.lock

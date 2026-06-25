@@ -1,0 +1,1367 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PersonaVoice v10.4.8 | 1秒极限语音克隆 Trade-off 演示</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        :root {
+            --bg: #06060e;
+            --panel-bg: rgba(255, 255, 255, 0.025);
+            --panel-border: rgba(255, 255, 255, 0.06);
+            --panel-hover: rgba(255, 255, 255, 0.04);
+            --text-primary: #f0f0f5;
+            --text-secondary: #8a8fa0;
+            --cyan: #00d4ff;
+            --purple: #a855f7;
+            --green: #10b981;
+            --amber: #f59e0b;
+            --rose: #f43f5e;
+            --blue: #3b82f6;
+            --radius: 12px;
+            --gap: 10px;
+            --header-h: 44px;
+        }
+
+        html, body {
+            height: 100%;
+            overflow: hidden;
+            font-family: -apple-system, "Segoe UI", "PingFang SC", "Microsoft YaHei", "Noto Color Emoji", "Apple Color Emoji", sans-serif;
+            background: var(--bg);
+            color: var(--text-primary);
+        }
+
+        body::before {
+            content: '';
+            position: fixed; inset: 0; z-index: 0; pointer-events: none;
+            background:
+                radial-gradient(ellipse at 20% 30%, rgba(120,80,255,0.08) 0%, transparent 50%),
+                radial-gradient(ellipse at 80% 20%, rgba(0,212,255,0.06) 0%, transparent 45%),
+                radial-gradient(ellipse at 50% 80%, rgba(168,85,247,0.05) 0%, transparent 50%);
+        }
+
+        .particles { position: fixed; inset: 0; z-index: 0; pointer-events: none; overflow: hidden; }
+        .particle {
+            position: absolute; width: 2px; height: 2px;
+            background: rgba(0,212,255,0.3); border-radius: 50%;
+            animation: float linear infinite;
+        }
+        @keyframes float {
+            0% { transform: translateY(100vh) scale(0); opacity: 0; }
+            10% { opacity: 1; } 90% { opacity: 1; }
+            100% { transform: translateY(-10vh) scale(1); opacity: 0; }
+        }
+
+        header {
+            position: relative; z-index: 100; height: var(--header-h);
+            display: flex; align-items: center; justify-content: space-between;
+            padding: 0 20px;
+            background: rgba(6,6,14,0.8); backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--panel-border);
+        }
+        .logo { display: flex; align-items: center; gap: 10px; }
+        .logo-icon {
+            width: 28px; height: 28px; border-radius: 7px;
+            display: flex; align-items: center; justify-content: center; font-size: 16px;
+            background: linear-gradient(135deg, rgba(0,212,255,0.15), rgba(168,85,247,0.15));
+            border: 1px solid rgba(255,255,255,0.08);
+        }
+        .logo-text { font-size: 18px; font-weight: 700; }
+        .logo-text span { color: var(--cyan); }
+        .version-badge {
+            margin-left: 8px; background: linear-gradient(135deg, var(--purple), var(--cyan));
+            color: white; padding: 2px 7px; border-radius: 10px; font-size: 9px; font-weight: 700;
+        }
+        .status-pill {
+            display: flex; align-items: center; gap: 6px; padding: 4px 10px;
+            background: var(--panel-bg); border: 1px solid var(--panel-border);
+            border-radius: 16px; font-size: 11px;
+        }
+        .status-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--text-secondary); }
+        .status-dot.online { background: var(--green); box-shadow: 0 0 6px var(--green); }
+        .status-dot.loading { background: var(--amber); animation: pulse 1s infinite; }
+        @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.3} }
+
+        /* ══ Layout: top 6.5 : bottom 3.5 ═══ */
+        main {
+            position: relative; z-index: 1;
+            height: calc(100vh - var(--header-h));
+            padding: var(--gap);
+            display: flex;
+            flex-direction: column;
+            gap: var(--gap);
+        }
+
+        .top-row {
+            flex: 6.5;
+            display: flex;
+            gap: var(--gap);
+            min-height: 0;
+            position: relative;
+        }
+        .bottom-row {
+            flex: 3.5;
+            display: flex;
+            gap: var(--gap);
+            min-height: 0;
+        }
+        .top-row .panel { flex: 1; min-width: 0; }
+        .bottom-row .panel { flex: 1; min-width: 0; }
+
+        .panel {
+            background: var(--panel-bg); backdrop-filter: blur(16px);
+            border: 1px solid var(--panel-border); border-radius: var(--radius);
+            padding: 12px; display: flex; flex-direction: column;
+            overflow: hidden; transition: border-color 0.3s;
+        }
+        .panel:hover { border-color: rgba(255,255,255,0.1); }
+
+        .panel-header {
+            display: flex; align-items: center; justify-content: space-between;
+            margin-bottom: 8px; flex-shrink: 0;
+        }
+        .panel-title-group { display: flex; align-items: center; gap: 8px; }
+        .panel-icon {
+            width: 24px; height: 24px; border-radius: 6px;
+            display: flex; align-items: center; justify-content: center; font-size: 13px;
+        }
+        .panel-title { font-size: 13px; font-weight: 700; }
+        .panel-desc { font-size: 10px; color: var(--text-secondary); margin-top: 1px; }
+        .panel-body { flex: 1; min-height: 0; display: flex; flex-direction: column; }
+        .panel-body.scrollable { overflow-y: auto; padding-right: 4px; }
+        /* 自定义滚动条 */
+        .panel-body.scrollable::-webkit-scrollbar { width: 4px; }
+        .panel-body.scrollable::-webkit-scrollbar-track { background: transparent; }
+        .panel-body.scrollable::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.12); border-radius: 2px; }
+
+        label {
+            display: block; font-size: 10px; color: var(--text-secondary);
+            margin-bottom: 4px; font-weight: 600; letter-spacing: 0.5px;
+        }
+        input[type="text"], textarea, select {
+            width: 100%; background: rgba(255,255,255,0.03);
+            border: 1px solid var(--panel-border); border-radius: 6px;
+            padding: 6px 8px; color: var(--text-primary); font-size: 12px;
+            font-family: inherit; transition: all 0.2s;
+        }
+        input:focus, textarea:focus, select:focus {
+            outline: none; border-color: var(--cyan); background: rgba(255,255,255,0.05);
+        }
+        textarea { resize: none; line-height: 1.4; }
+        input[type="range"] { width: 100%; accent-color: var(--cyan); height: 4px; }
+        input[type="file"] { display: none; }
+
+        .btn {
+            background: linear-gradient(135deg, var(--cyan), var(--purple));
+            color: white; border: none; padding: 8px 14px; border-radius: 6px;
+            font-size: 12px; font-weight: 700; cursor: pointer;
+            transition: all 0.2s; display: inline-flex; align-items: center; justify-content: center; gap: 5px;
+        }
+        .btn:hover { transform: translateY(-1px); box-shadow: 0 4px 12px rgba(0,212,255,0.3); }
+        .btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+        .btn-sm { padding: 5px 8px; font-size: 10px; }
+        .btn-secondary { background: rgba(255,255,255,0.04); border: 1px solid var(--panel-border); }
+        .btn-secondary:hover { background: rgba(255,255,255,0.08); box-shadow: none; }
+
+        .info-banner {
+            background: rgba(0,212,255,0.05); border: 1px solid rgba(0,212,255,0.15);
+            border-radius: 6px; padding: 6px 8px; font-size: 9px;
+            color: var(--text-secondary); line-height: 1.35; margin-bottom: 8px;
+            max-height: 64px; overflow: hidden;
+        }
+        .info-banner strong { color: var(--cyan); font-weight: 600; }
+        .info-banner.compact { line-height: 1.3; padding: 5px 7px; font-size: 9px; }
+
+        .download-link {
+            display: inline-flex; align-items: center; gap: 4px;
+            font-size: 10px; color: var(--cyan); text-decoration: none;
+            margin-top: 6px; cursor: pointer;
+        }
+        .download-link:hover { text-decoration: underline; }
+
+        .upload-zone {
+            border: 1.5px dashed var(--panel-border); border-radius: 8px;
+            padding: 24px; text-align: center; cursor: pointer;
+            transition: all 0.2s; background: rgba(255,255,255,0.015); flex-shrink: 0;
+        }
+        .upload-zone:hover { border-color: var(--cyan); background: rgba(0,212,255,0.03); }
+        .upload-zone.has-file { border-color: var(--green); border-style: solid; background: rgba(16,185,129,0.04); }
+        .upload-icon { font-size: 24px; margin-bottom: 2px; }
+        .upload-text { font-size: 11px; color: var(--text-secondary); }
+
+        .emotion-group { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; }
+        .emotion-btn {
+            background: rgba(255,255,255,0.02); border: 1px solid var(--panel-border);
+            border-radius: 6px; padding: 6px 3px; cursor: pointer;
+            text-align: center; transition: all 0.2s; font-size: 11px;
+        }
+        .emotion-btn:hover { border-color: var(--cyan); }
+        .emotion-btn.active {
+            background: linear-gradient(135deg, rgba(0,212,255,0.15), rgba(168,85,247,0.15));
+            border-color: var(--cyan); color: white;
+        }
+        .emotion-emoji { font-size: 18px; display: block; margin-bottom: 1px; }
+
+        .tabs {
+            display: flex; gap: 3px; background: rgba(255,255,255,0.02);
+            border-radius: 6px; padding: 3px; margin-bottom: 8px; flex-shrink: 0;
+        }
+        .tab {
+            flex: 1; padding: 5px 0; cursor: pointer; font-size: 11px;
+            color: var(--text-secondary); border-radius: 5px;
+            text-align: center; transition: all 0.2s;
+        }
+        .tab:hover { color: var(--text-primary); }
+        .tab.active { background: rgba(0,212,255,0.12); color: var(--cyan); font-weight: 600; }
+
+        .metric-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; flex-shrink: 0; }
+        .metric-card {
+            background: rgba(255,255,255,0.02); border: 1px solid var(--panel-border);
+            border-radius: 6px; padding: 7px; text-align: center;
+        }
+        .metric-label { font-size: 9px; color: var(--text-secondary); }
+        .metric-value {
+            font-size: 13px; font-weight: 700; margin-top: 2px;
+            background: linear-gradient(135deg, var(--cyan), var(--green));
+            -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;
+        }
+
+        .chart-wrap { flex: 1; min-height: 0; position: relative; width: 100%; }
+        .chart-wrap canvas { position: absolute; inset: 0; }
+
+        .arch-flow { display: flex; flex-direction: column; gap: 4px; overflow-y: auto; padding-right: 3px; }
+        .arch-node {
+            background: rgba(255,255,255,0.02); border-left: 3px solid;
+            border-radius: 6px; padding: 8px 10px;
+            display: flex; align-items: center; justify-content: space-between;
+        }
+        .arch-node-name { font-size: 12px; font-weight: 700; }
+        .arch-node-desc { font-size: 10px; color: var(--text-secondary); margin-top: 2px; }
+        .arch-node-metrics { font-size: 9px; color: var(--text-secondary); text-align: right; line-height: 1.5; }
+        .arch-arrow { text-align: center; color: var(--text-secondary); font-size: 11px; opacity: 0.4; }
+
+        .cpg-wrap {
+            flex: 1; min-height: 220px;
+            background: rgba(0,0,0,0.15);
+            border: 1px solid var(--panel-border); border-radius: 8px;
+            position: relative; overflow: hidden; margin-top: 6px;
+        }
+        .cpg-wrap canvas {
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            display: block;
+        }
+        .cpg-legend {
+            position: absolute; top: 6px; right: 8px;
+            display: flex; gap: 8px; font-size: 9px; color: var(--text-secondary);
+        }
+        .cpg-legend span { display: flex; align-items: center; gap: 3px; }
+        .dot { width: 6px; height: 6px; border-radius: 50%; }
+
+        .log-area {
+            flex: 1; min-height: 0; background: rgba(0,0,0,0.2);
+            border: 1px solid var(--panel-border); border-radius: 6px;
+            padding: 8px; font-family: "SF Mono", Consolas, Monaco, monospace;
+            font-size: 10px; overflow-y: auto; line-height: 1.5;
+        }
+        .log-line { margin-bottom: 2px; }
+        .log-time { color: var(--text-secondary); margin-right: 4px; }
+        .log-info { color: var(--cyan); }
+        .log-success { color: var(--green); }
+        .log-warn { color: var(--amber); }
+        .log-error { color: var(--rose); }
+
+        .module-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; margin-bottom: 8px; }
+        .module-pill {
+            background: rgba(255,255,255,0.02); border: 1px solid var(--panel-border);
+            border-radius: 6px; padding: 6px; text-align: center; font-size: 10px;
+        }
+        .module-pill.ok { border-color: rgba(16,185,129,0.2); }
+        .module-pill .mod-name { color: var(--text-secondary); font-size: 9px; }
+        .module-pill .mod-status { color: var(--green); font-weight: 700; margin-top: 1px; }
+
+        /* v10.4.7: 人格→克隆注入指示器 */
+        .persona-injection {
+            background: linear-gradient(90deg, rgba(168,85,247,0.08), rgba(0,212,255,0.04));
+            border: 1px solid rgba(168,85,247,0.2);
+            border-radius: 6px;
+            padding: 8px 10px;
+            margin-top: 8px;
+            font-size: 10px;
+        }
+        .persona-injection .pi-title { color: #a855f7; font-weight: 700; margin-bottom: 4px; display: flex; align-items: center; gap: 5px; }
+        .persona-injection .pi-flow { display: flex; align-items: center; gap: 4px; flex-wrap: wrap; color: var(--text-secondary); }
+        .persona-injection .pi-flow span { background: rgba(255,255,255,0.04); padding: 1px 5px; border-radius: 3px; border: 1px solid rgba(255,255,255,0.05); }
+        .persona-injection.active { border-color: rgba(0,212,255,0.35); background: linear-gradient(90deg, rgba(0,212,255,0.08), rgba(168,85,247,0.04)); }
+        .persona-injection.active .pi-title { color: var(--cyan); }
+
+        /* v10.4.7: 流程图专用样式, 防止箭头/文字重叠 */
+        .flow-strip {
+            display: flex; flex-wrap: wrap; align-items: center; gap: 6px;
+        }
+        .flow-step {
+            display: inline-flex; align-items: center; gap: 5px;
+            background: rgba(255,255,255,0.04);
+            border: 1px solid rgba(255,255,255,0.07);
+            border-radius: 5px;
+            padding: 4px 8px;
+            font-size: 10px;
+            color: var(--text-secondary);
+            white-space: nowrap;
+        }
+        .flow-step.final { background: rgba(80,200,180,0.08); border-color: rgba(80,200,180,0.18); color: #50c8b4; }
+        .flow-step .num { width: 15px; height: 15px; border-radius: 50%; background: rgba(255,255,255,0.08); color: var(--text-primary); font-size: 8px; display: flex; align-items: center; justify-content: center; font-weight: 700; }
+        .flow-arrow { color: var(--text-secondary); font-size: 14px; opacity: 0.5; }
+
+        /* v10.4.7: 结构化回忆中文表单 */
+        .recall-form { display: flex; flex-direction: column; gap: 8px; }
+        .recall-row { display: flex; align-items: center; gap: 8px; }
+        .recall-row label { width: 70px; flex-shrink: 0; margin: 0; font-size: 10px; color: var(--text-secondary); }
+        .recall-row input[type="range"] { flex: 1; }
+        .recall-row .recall-val { width: 32px; text-align: right; font-size: 11px; color: var(--cyan); font-weight: 700; }
+
+        .progress-list { display: flex; flex-direction: column; gap: 5px; }
+        .progress-row { display: flex; align-items: center; gap: 6px; font-size: 10px; }
+        .progress-row span:first-child { width: 60px; color: var(--text-secondary); }
+        .progress-bar { flex: 1; height: 4px; background: rgba(255,255,255,0.04); border-radius: 2px; overflow: hidden; }
+        .progress-fill { height: 100%; border-radius: 2px; }
+
+        .empty-state {
+            flex: 1; display: flex; align-items: center; justify-content: center;
+            color: var(--text-secondary); font-size: 11px; text-align: center;
+        }
+
+        .h-split { display: flex; gap: 12px; flex: 1; min-height: 0; }
+        .h-split > .left { flex: 1; display: flex; flex-direction: column; min-width: 0; justify-content: space-between; }
+        .h-split > .right { flex: 1; display: flex; flex-direction: column; min-width: 0; }
+
+        .audio-box { background: rgba(255,255,255,0.03); border: 1px solid var(--panel-border); border-radius: 6px; padding: 6px; }
+        audio { width: 100%; height: 28px; }
+
+        .hidden { display: none !important; }
+
+        /* ═══ Persona panel: equal charts ═══ */
+        .persona-inner {
+            display: flex; gap: 12px; flex: 1; min-height: 0;
+        }
+        .persona-input {
+            width: 240px; flex-shrink: 0;
+            display: flex; flex-direction: column;
+        }
+        .persona-charts {
+            flex: 1; display: flex; gap: 12px; min-width: 0;
+            align-items: stretch;
+            overflow: hidden;  /* v8.1 fix: 防止子元素溢出 */
+        }
+        .persona-radar-wrap, .persona-cpg-wrap {
+            flex: 1; min-width: 0; max-width: 50%;  /* v8.1 fix: 限制最大宽度 */
+            display: flex; flex-direction: column;
+            min-height: 280px;
+            overflow: hidden;  /* v8.1 fix: 裁剪溢出标签 */
+        }
+        .radar-container {
+            flex: 1; min-height: 220px;
+            position: relative;
+            display: flex; align-items: center; justify-content: center;
+            overflow: hidden;  /* v8.1 fix: 裁剪 canvas 溢出 */
+        }
+        .radar-container canvas {
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            display: block;
+        }
+
+        @media (max-width: 1200px) {
+            main { grid-template-columns: 1fr; grid-template-rows: auto; overflow-y: auto; height: auto; }
+            .panel-clone, .panel-persona, .panel-arch, .panel-conditions { grid-column: 1; grid-row: auto; min-height: 350px; }
+            .persona-inner { flex-direction: column; }
+            .persona-input { width: 100%; }
+            .persona-charts { flex-direction: column; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="particles" id="particles"></div>
+
+<header>
+    <div class="logo">
+        <div class="logo-icon">&#x1F33B;</div>
+        <div>
+            <div class="logo-text">PersonaVoice <span>Dashboard</span></div>
+        </div>
+    </div>
+    <div class="status-pill" id="statusPill">
+        <span class="status-dot" id="statusDot"></span>
+        <span id="statusText">&#x8FDE;&#x63A5;&#x4E2D;...</span>
+    </div>
+</header>
+
+<main>
+    <!-- ═══ TOP ROW: 声音克隆 + 人格蒸馏 (1:1) ═══ -->
+    <div class="top-row" id="topRow">
+        <!-- 声音克隆 -->
+        <section class="panel panel-clone">
+        <div class="panel-header">
+            <div class="panel-title-group">
+                <div class="panel-icon" style="background:linear-gradient(135deg,rgba(16,185,129,0.15),rgba(5,150,105,0.15));color:var(--green);">&#x1F3A4;</div>
+                <div>
+                    <div class="panel-title">&#x58F0;&#x97F3;&#x514B;&#x9686;</div>
+                    <div class="panel-desc">1 &#x79D2;&#x6781;&#x9650;&#x53C2;&#x8003;&#x97F3;&#x9891; + &#x6587;&#x672C; &rarr; &#x4E2A;&#x6027;&#x5316;&#x8BED;&#x97F3;</div>
+                </div>
+            </div>
+        </div>
+        <div class="panel-body">
+            <div class="h-split">
+                <div class="left">
+                    <div class="upload-zone" id="uploadZone" onclick="document.getElementById('audioFile').click()">
+                        <div class="upload-icon">&#x1F4C1;</div>
+                        <div class="upload-text" id="uploadText">&#x70B9;&#x51FB;&#x6216;&#x62D6;&#x62FD;&#x4E0A;&#x4F20;&#x53C2;&#x8003;&#x97F3;&#x9891;</div>
+                    </div>
+                    <input type="file" id="audioFile" accept="audio/*">
+                    <audio id="refAudioPlayer" controls style="width:100%;margin-top:6px;display:none;height:28px;"></audio>
+
+                    <div style="margin-top:8px;">
+                        <label>&#x5408;&#x6210;&#x6587;&#x672C;</label>
+                        <textarea id="cloneText" rows="2" placeholder="&#x8F93;&#x5165;&#x8981;&#x5408;&#x6210;&#x7684;&#x6587;&#x672C;...">&#x4F60;&#x597D;&#xFF0C;&#x8FD9;&#x662F; PersonaVoice &#x7684;&#x4E2A;&#x6027;&#x5316;&#x58F0;&#x97F3;&#x514B;&#x9686;&#x6F14;&#x793A;&#x3002;</textarea>
+                    </div>
+
+                    <div style="margin-top:6px;">
+                        <label>&#x60C5;&#x611F;&#x63A7;&#x5236;</label>
+                        <div class="emotion-group" id="emotionGroup">
+                            <div class="emotion-btn active" data-emotion="neutral"><span class="emotion-emoji">&#x1F610;</span>&#x4E2D;&#x6027;</div>
+                            <div class="emotion-btn" data-emotion="happy"><span class="emotion-emoji">&#x1F60A;</span>&#x5F00;&#x5FC3;</div>
+                            <div class="emotion-btn" data-emotion="sad"><span class="emotion-emoji">&#x1F622;</span>&#x60B2;&#x4F24;</div>
+                            <div class="emotion-btn" data-emotion="angry"><span class="emotion-emoji">&#x1F620;</span>&#x6124;&#x6012;</div>
+                        </div>
+                    </div>
+
+                    <div style="margin-top:6px;">
+                        <label>&#x60C5;&#x611F;&#x5F3A;&#x5EA6;: <span id="intensityValue">0.5</span></label>
+                        <input type="range" id="emotionIntensity" min="0" max="1" step="0.1" value="0.5">
+                        <div style="font-size:9px;color:var(--text-secondary);margin-top:4px;line-height:1.3;">
+                            &#x63D0;&#x793A;&#xFF1A;&#x60C5;&#x611F;&#x5F3A;&#x5EA6;&#x5F53;&#x524D;&#x4E3A;&#x9884;&#x7559;&#x63A5;&#x53E3;&#xFF0C;&#x4E0D;&#x4F1A;&#x6539;&#x53D8;&#x5408;&#x6210;&#x884C;&#x4E3A;&#xFF0C;&#x5408;&#x6210;&#x7ED3;&#x679C;&#x5C06;&#x5B8C;&#x6574;&#x8986;&#x76D6;&#x8F93;&#x5165;&#x6587;&#x672C;&#x3002;
+                        </div>
+                    </div>
+
+                    <div style="margin-top:6px;">
+                        <label>v10.4.8 OES 环境权重: <span id="envWeightValue">0.0</span> — 0=录音棚纯净(SOTA), 1=原始质感</label>
+                        <input type="range" id="envWeight" min="0" max="1" step="0.1" value="0.0">
+                    </div>
+
+                    <div style="display:flex; gap:6px; margin-top:8px;">
+                        <button class="btn" id="cloneBtn" onclick="performClone()" style="flex:1;">&#x2728; &#x5F00;&#x59CB;&#x514B;&#x9686;</button>
+                        <button class="btn btn-secondary" onclick="loadSample()" style="flex:1;">&#x1F4CB; &#x52A0;&#x8F7D;&#x793A;&#x4F8B;</button>
+                    </div>
+                    <button class="btn" id="demoBtn" onclick="loadPresetDemo()" style="width:100%;margin-top:6px;background:linear-gradient(135deg,var(--cyan),var(--purple));color:white;border:none;">&#x1F3A4; &#x4E00;&#x952E;&#x6F14;&#x793A;&#xFF08;&#x65E0;&#x9700;&#x540E;&#x7AEF;&#xFF0C;&#x70B9;&#x51FB;&#x5373;&#x53EF;&#x4F53;&#x9A8C;&#xFF09;</button>
+
+                    <!-- v10.4.7: 人格注入状态指示器 -->
+                    <div class="persona-injection" id="personaInjectionBox" style="display:none;">
+                        <div class="pi-title">&#x1F9E0; &#x4EBA;&#x683C;&#x6CE8;&#x5165;&#x72B6;&#x6001;</div>
+                        <div class="pi-flow">
+                            <span>&#x804A;&#x5929;&#x8BB0;&#x5F55;</span><span class="flow-arrow">&#x2192;</span>
+                            <span>BERT</span><span class="flow-arrow">&#x2192;</span>
+                            <span>Big Five</span><span class="flow-arrow">&#x2192;</span>
+                            <span>persona_emb</span><span class="flow-arrow">&#x2192;</span>
+                            <span>FiLM &#x9002;&#x914D;&#x5668;</span><span class="flow-arrow">&#x2192;</span>
+                            <span>DiT [20,21]</span>
+                        </div>
+                        <div style="margin-top:5px;color:var(--text-secondary);font-size:9px;line-height:1.4;">
+                            &#x5F53;&#x53F3;&#x4FA7;&#x4EBA;&#x683C;&#x5206;&#x6790;&#x5B8C;&#x6210;&#x540E;&#xFF0C;64-dim persona_emb &#x4F1A;&#x8FDB;&#x5165; LAAG &#7684;&#x52A8;&#x6001; FiLM&#x3002;&#x77ED;&#x6587;&#x672C;&#xFF08;&#x5355; chunk&#xFF09;FiLM off&#xFF0C;&#x957F;&#x6587;&#x672C;&#xFF08;&#x591A; chunk&#xFF09;FiLM on&#xFF0C;&#x9501;&#x5B9A;&#x97F3;&#x8272;&#x4E0D;&#x6F02;&#x79FB;&#x3002;
+                        </div>
+                    </div>
+                </div>
+
+                <div class="right">
+                    <div class="panel-body scrollable" id="cloneRightBody">
+                        <div class="info-banner compact" id="cloneInfoBanner">
+                            <strong>PersonaVoice v10.4.8</strong>：1s 极限克隆 | 核心：LAAG 动态 Chunking + FiLM + OES 环境解缠 | 短文本 WER 为 Flow-Matching 固有限制 (Future Work)。
+                        </div>
+                        <label>&#x5408;&#x6210;&#x7ED3;&#x679C;</label>
+                        <div id="cloneResult" class="empty-state" style="border:1px dashed var(--panel-border);border-radius:6px;min-height:70px;margin-bottom:8px;">
+                            &#x7B49;&#x5F85;&#x6267;&#x884C;&#x58F0;&#x97F3;&#x514B;&#x9686;...
+                        </div>
+
+
+                        <label style="margin-top:0;display:flex;align-items:center;gap:6px;">
+                            <span>&#x97F3;&#x9891;&#x6CE2;&#x5F62;</span>
+                            <span style="font-size:10px;color:var(--text-secondary);font-weight:normal;">Waveform &mdash; &#x5408;&#x6210;&#x8BED;&#x97F3;&#x7684;&#x632F;&#x5E45;&#x66F4;&#x5316;</span>
+                        </label>
+                        <div id="melWrap" style="border-radius:6px;overflow:hidden;background:#0c111c;border:1px solid rgba(255,255,255,0.06);padding:0;min-height:120px;flex-shrink:0;">
+                            <img id="melImg" style="width:100%;height:auto;display:block;min-height:100px;" alt="">
+                            <div id="waveInfo" style="display:flex;justify-content:space-between;padding:2px 8px 6px;font-size:9px;color:#64738c;"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ═══ RIGHT: 人格蒸馏 ═══ -->
+    <section class="panel panel-persona">
+        <div class="panel-header">
+            <div class="panel-title-group">
+                <div class="panel-icon" style="background:linear-gradient(135deg,rgba(168,85,247,0.15),rgba(124,58,237,0.15));color:var(--purple);">&#x1F9E0;</div>
+                <div>
+                    <div class="panel-title">&#x4EBA;&#x683C;&#x84B8;&#x998F;</div>
+                    <div class="panel-desc">BERT &#x7F16;&#x7801;&#x804A;&#x5929;&#x8BB0;&#x5F55; &rarr; Big Five &#x4EBA;&#x683C; &rarr; FiLM &#x6CE8;&#x5165;</div>
+                </div>
+            </div>
+            <div style="display:flex;gap:6px;">
+                <button class="btn" id="analyzeBtn" onclick="analyzePersona()">&#x1F50D; &#x5206;&#x6790;&#x4EBA;&#x683C;</button>
+                <button class="btn btn-secondary btn-sm" onclick="calibratePersona()">&#x2699; &#x6821;&#x51C6;</button>
+            </div>
+        </div>
+        <div class="panel-body">
+            <div class="persona-inner">
+                <div class="persona-input">
+                    <div class="tabs">
+                        <div class="tab active" data-tab="chat">&#x804A;&#x5929;&#x8BB0;&#x5F55;</div>
+                        <div class="tab" data-tab="recall">&#x7ED3;&#x6784;&#x5316;&#x56DE;&#x5FC6;</div>
+                    </div>
+                    <div id="tab-chat" style="flex:1;display:flex;flex-direction:column;min-height:0;">
+                        <label>&#x804A;&#x5929;&#x8BB0;&#x5F55; (&#x6BCF;&#x884C;&#x4E00;&#x6761;)</label>
+                        <textarea id="chatHistory" rows="6" style="flex:1;">&#x6211;&#x5E73;&#x65F6;&#x559C;&#x6B22;&#x5B89;&#x9759;&#x5730;&#x770B;&#x4E66;&#xFF0C;&#x4E0D;&#x592A;&#x559C;&#x6B22;&#x5634;&#x6742;&#x7684;&#x73AF;&#x5883;&#x3002;
+&#x505A;&#x4E8B;&#x8981;&#x6709;&#x8BA1;&#x5212;&#xFF0C;&#x4E0D;&#x80FD;&#x968F;&#x5FC3;&#x6240;&#x6B32;&#x3002;
+&#x5BF9;&#x670B;&#x53CB;&#x8981;&#x771F;&#x8BDA;&#xFF0C;&#x8FD9;&#x662F;&#x6211;&#x7684;&#x539F;&#x5219;&#x3002;
+&#x9047;&#x5230;&#x95EE;&#x9898;&#x6211;&#x4F1A;&#x51B7;&#x9759;&#x5206;&#x6790;&#xFF0C;&#x4E0D;&#x4F1A;&#x60C5;&#x7EEA;&#x5316;&#x3002;</textarea>
+                    </div>
+                    <div id="tab-recall" class="hidden" style="flex:1;display:flex;flex-direction:column;min-height:0;">
+                        <label>&#x7ED3;&#x6784;&#x5316;&#x56DE;&#x5FC6; (&#x5927;&#x4E94;&#x4EBA;&#x683C;&#x6ED1;&#x5757;)</label>
+                        <div class="recall-form" id="recallForm" style="flex:1;overflow-y:auto;padding-right:4px;">
+                            <div class="recall-row"><label>&#x5F00;&#x653E;&#x6027;</label><input type="range" class="recall-slider" data-key="openness" min="0" max="1" step="0.05" value="0.7"><span class="recall-val">0.70</span></div>
+                            <div class="recall-row"><label>&#x5C3D;&#x8D23;&#x6027;</label><input type="range" class="recall-slider" data-key="conscientiousness" min="0" max="1" step="0.05" value="0.8"><span class="recall-val">0.80</span></div>
+                            <div class="recall-row"><label>&#x5916;&#x5411;&#x6027;</label><input type="range" class="recall-slider" data-key="extraversion" min="0" max="1" step="0.05" value="0.4"><span class="recall-val">0.40</span></div>
+                            <div class="recall-row"><label>&#x5B9C;&#x4EBA;&#x6027;</label><input type="range" class="recall-slider" data-key="agreeableness" min="0" max="1" step="0.05" value="0.6"><span class="recall-val">0.60</span></div>
+                            <div class="recall-row"><label>&#x60C5;&#x7EEA;&#x7A33;&#x5B9A;&#x6027;</label><input type="range" class="recall-slider" data-key="neuroticism" min="0" max="1" step="0.05" value="0.3"><span class="recall-val">0.30</span></div>
+                        </div>
+                        <textarea id="structuredRecalls" class="hidden">{"openness":0.7,"conscientiousness":0.8,"extraversion":0.4,"agreeableness":0.6,"neuroticism":0.3}</textarea>
+                    </div>
+                    <div style="margin-top:8px;flex-shrink:0;">
+                        <label>&#x4EBA;&#x683C;&#x6307;&#x6807;</label>
+                        <div class="metric-grid" id="personaMetrics">
+                            <div class="metric-card"><div class="metric-label">&#x7EF4;&#x5EA6;</div><div class="metric-value" style="font-size:11px">&mdash;</div></div>
+                            <div class="metric-card"><div class="metric-label">&#x8303;&#x6570;</div><div class="metric-value">&mdash;</div></div>
+                            <div class="metric-card"><div class="metric-label">&#x5747;&#x503C;</div><div class="metric-value">&mdash;</div></div>
+                            <div class="metric-card"><div class="metric-label">&#x6807;&#x51C6;&#x5DEE;</div><div class="metric-value">&mdash;</div></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="persona-charts">
+                    <div class="persona-radar-wrap">
+                        <label>&#x7279;&#x8D28;&#x96F7;&#x8FBE;&#x56FE;</label>
+                        <div class="radar-container">
+                            <canvas id="radarCanvas"></canvas>
+                        </div>
+                    </div>
+                    <div class="persona-cpg-wrap">
+                        <label>Big Five &#x4EBA;&#x683C;&#x56FE;&#x8C31;</label>
+                        <div class="cpg-wrap">
+                            <canvas id="cpgCanvas"></canvas>
+                            <div class="cpg-legend">
+                                <span><i class="dot" style="background:#a855f7"></i>&#x5168;&#x5C40;</span>
+                                <span><i class="dot" style="background:#00d4ff"></i>&#x5C40;&#x90E8;</span>
+                                <span><i class="dot" style="background:#f59e0b"></i>&#x60C5;&#x5883;</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    </div>
+
+    <!-- ═══ BOTTOM ROW: 架构 + 条件嵌入 + 系统状态 (1:1:1) ═══ -->
+    <div class="bottom-row">
+        <!-- 架构数据流 -->
+        <section class="panel panel-arch">
+        <div class="panel-header">
+            <div class="panel-title-group">
+                <div class="panel-icon" style="background:linear-gradient(135deg,rgba(245,158,11,0.15),rgba(217,119,6,0.15));color:var(--amber);">&#x1F3D7;</div>
+                <div>
+                    <div class="panel-title">&#x67B6;&#x6784;&#x6570;&#x636E;&#x6D41;</div>
+                    <div class="panel-desc">&#x6A21;&#x5757;&#x4F9D;&#x8D56;&#x4E0E;&#x6570;&#x636E;&#x4F20;&#x9012;&#x8DEF;&#x5F84;</div>
+                </div>
+            </div>
+        </div>
+        <div class="panel-body">
+            <div class="arch-flow" id="archFlow"></div>
+        </div>
+    </section>
+
+    <!-- ═══ 条件嵌入 ═══ -->
+    <section class="panel panel-conditions">
+        <div class="panel-header">
+            <div class="panel-title-group">
+                <div class="panel-icon" style="background:linear-gradient(135deg,rgba(59,130,246,0.15),rgba(37,99,235,0.15));color:var(--blue);">&#x1F4CA;</div>
+                <div>
+                    <div class="panel-title">&#x6761;&#x4EF6;&#x5D4C;&#x5165;</div>
+                </div>
+            </div>
+        </div>
+        <div class="panel-body">
+            <label>&#x6761;&#x4EF6;&#x5D4C;&#x5165;&#x7EDF;&#x8BA1;</label>
+            <div id="conditionsView" style="flex:1;min-height:0;overflow-y:auto;">
+                <div class="empty-state" style="min-height:60px;">&#x514B;&#x9686;&#x540E;&#x663E;&#x793A;&#x6761;&#x4EF6;&#x5D4C;&#x5165;</div>
+            </div>
+            <div class="progress-list" style="margin-top:8px;">
+                <div class="progress-row"><span>&#x97F3;&#x8272;&#x4FDD;&#x771F;</span><div class="progress-bar"><div class="progress-fill" id="metricSECS" style="width:0%;background:var(--green)"></div></div></div>
+                <div class="progress-row"><span>&#x60C5;&#x611F;&#x89E3;&#x8026;</span><div class="progress-bar"><div class="progress-fill" id="metricEBD" style="width:0%;background:var(--cyan)"></div></div></div>
+                <div class="progress-row"><span>&#x4EBA;&#x683C;&#x5BF9;&#x9F50;</span><div class="progress-bar"><div class="progress-fill" id="metricSWD" style="width:0%;background:var(--purple)"></div></div></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ═══ 系统状态 ═══ -->
+    <section class="panel panel-system">
+        <div class="panel-header">
+            <div class="panel-title-group">
+                <div class="panel-icon" style="background:linear-gradient(135deg,rgba(16,185,129,0.15),rgba(5,150,105,0.15));color:var(--green);">&#x2699;</div>
+                <div>
+                    <div class="panel-title">&#x7CFB;&#x7EDF;&#x72B6;&#x6001;</div>
+                </div>
+            </div>
+            <button class="btn btn-secondary btn-sm" onclick="clearLog()">&#x6E05;&#x7A7A;&#x65E5;&#x5FD7;</button>
+        </div>
+        <div class="panel-body">
+            <label>&#x6A21;&#x5757;&#x72B6;&#x6001;</label>
+            <div class="module-grid" id="moduleGrid">
+                <div class="module-pill"><div class="mod-name">F5-TTS DiT</div><div class="mod-status">&mdash;</div></div>
+                <div class="module-pill"><div class="mod-name">FiLM Adapter</div><div class="mod-status">&mdash;</div></div>
+                <div class="module-pill"><div class="mod-name">OES 环境解缠</div><div class="mod-status">&mdash;</div></div>
+                <div class="module-pill"><div class="mod-name">CEAG (disabled)</div><div class="mod-status">&mdash;</div></div>
+                <div class="module-pill"><div class="mod-name">LAAG 长度自适应</div><div class="mod-status">&mdash;</div></div>
+                <div class="module-pill"><div class="mod-name">Vocos 声码器</div><div class="mod-status">&mdash;</div></div>
+            </div>
+            <label>&#x8FD0;&#x884C;&#x65E5;&#x5FD7;</label>
+            <div class="log-area" id="logArea" style="flex:1;min-height:0;"></div>
+        </div>
+    </section>
+    </div>
+</main>
+
+<script>
+// 自动检测运行环境：file:// 离线模式 vs http:// 在线模式
+const IS_OFFLINE = window.location.protocol === 'file:';
+const API_BASE = IS_OFFLINE ? '.' : '';
+let selectedEmotion = 'neutral';
+let audioBlobUrl = null;
+let refAudioBlobUrl = null;
+let lastTraitValues = null;
+let radarAnimFrame = null;
+let radarCurrentValues = [];
+let radarTargetValues = [];
+let lastAudioBase64 = null;
+
+function createParticles() {
+    const c = document.getElementById('particles');
+    for (let i = 0; i < 20; i++) {
+        const p = document.createElement('div');
+        p.className = 'particle';
+        p.style.left = Math.random() * 100 + '%';
+        p.style.animationDuration = (8 + Math.random() * 12) + 's';
+        p.style.animationDelay = Math.random() * 5 + 's';
+        p.style.width = p.style.height = (1 + Math.random() * 2) + 'px';
+        c.appendChild(p);
+    }
+}
+
+function log(msg, level = 'info') {
+    const area = document.getElementById('logArea');
+    const time = new Date().toLocaleTimeString('zh-CN', { hour12: false });
+    const line = document.createElement('div');
+    line.className = 'log-line';
+    line.innerHTML = '<span class="log-time">[' + time + ']</span> <span class="log-' + level + '">' + msg + '</span>';
+    area.appendChild(line);
+    area.scrollTop = area.scrollHeight;
+}
+function clearLog() { document.getElementById('logArea').innerHTML = ''; }
+
+function downloadLastAudio() {
+    if (!lastAudioBase64) { log('没有可下载的音频', 'warn'); return; }
+    var link = document.createElement('a');
+    link.href = 'data:audio/wav;base64,' + lastAudioBase64;
+    link.download = 'personavoice_cloned_' + new Date().getTime() + '.wav';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    log('音频已下载', 'success');
+}
+
+async function checkHealth() {
+    const dot = document.getElementById('statusDot');
+    const text = document.getElementById('statusText');
+    dot.className = 'status-dot loading';
+    text.textContent = '\u8FDE\u63A5\u4E2D...';
+    try {
+        const res = await fetch(API_BASE + '/api/health');
+        const data = await res.json();
+        if (data.status === 'ok') {
+            dot.className = 'status-dot online';
+            text.textContent = '\u5728\u7EBF v' + data.version;
+            const mods = data.modules || {};
+            const grid = document.getElementById('moduleGrid');
+            // v10.4.7: 对齐后端 /api/health 实际返回的模块名
+            const names = [
+                ['f5_backbone','F5-TTS DiT'],['film_adapter','FiLM Adapter'],
+                ['oes','OES 环境解缠'],['ceag','CEAG (disabled)'],
+                ['laag','LAAG 长度自适应'],['vocoder','Vocos 声码器']
+            ];
+            grid.innerHTML = names.map(function(kn) {
+                var ok = mods[kn[0]];
+                return '<div class="module-pill ' + (ok?'ok':'') + '"><div class="mod-name">' + kn[1] + '</div><div class="mod-status">' + (ok?'\u5C31\u7EEA':'\u672A\u5C31\u7EEA') + '</div></div>';
+            }).join('');
+            log('Pipeline v' + data.version + ' \u5C31\u7EEA, modules=[' + Object.keys(mods).filter(function(k){return mods[k];}).join(',') + ']', 'success');
+        } else { throw new Error(data.message); }
+    } catch (e) {
+        dot.className = 'status-dot';
+        text.textContent = '\u79BB\u7EBF';
+        log('\u8FDE\u63A5\u5931\u8D25: ' + e.message, 'error');
+    }
+}
+
+var uploadZone = document.getElementById('uploadZone');
+var audioFile = document.getElementById('audioFile');
+
+audioFile.addEventListener('change', function(e) { if (e.target.files.length > 0) handleFile(e.target.files[0]); });
+uploadZone.addEventListener('dragover', function(e) { e.preventDefault(); uploadZone.classList.add('dragover'); });
+uploadZone.addEventListener('dragleave', function() { uploadZone.classList.remove('dragover'); });
+uploadZone.addEventListener('drop', function(e) {
+    e.preventDefault(); uploadZone.classList.remove('dragover');
+    if (e.dataTransfer.files.length > 0) handleFile(e.dataTransfer.files[0]);
+});
+
+function handleFile(file) {
+    uploadZone.classList.add('has-file');
+    document.getElementById('uploadText').innerHTML = '\u2713 ' + file.name + ' (' + (file.size/1024).toFixed(1) + ' KB) <span style="color:#10b981;font-size:9px;">\u2192 \u81EA\u52A8\u622A\u53D6\u524D 1s</span>';
+    log('\u5DF2\u52A0\u8F7D\u97F3\u9891: ' + file.name + ' (\u5C06\u4F7F\u7528\u524D 1s \u4F5C\u4E3A\u53C2\u8003)', 'info');
+
+    // 显示原声播放器（让用户能听参考音频）
+    if (refAudioBlobUrl) URL.revokeObjectURL(refAudioBlobUrl);
+    refAudioBlobUrl = URL.createObjectURL(file);
+    var refPlayer = document.getElementById('refAudioPlayer');
+    if (refPlayer) {
+        refPlayer.src = refAudioBlobUrl;
+        refPlayer.style.display = 'block';
+    }
+}
+
+document.querySelectorAll('.emotion-btn').forEach(function(btn) {
+    btn.addEventListener('click', function() {
+        document.querySelectorAll('.emotion-btn').forEach(function(b) { b.classList.remove('active'); });
+        btn.classList.add('active');
+        selectedEmotion = btn.dataset.emotion;
+    });
+});
+
+document.getElementById('emotionIntensity').addEventListener('input', function(e) {
+    document.getElementById('intensityValue').textContent = e.target.value;
+});
+
+document.getElementById('envWeight').addEventListener('input', function(e) {
+    document.getElementById('envWeightValue').textContent = e.target.value;
+});
+
+// v10.4.7: 结构化回忆滑块事件
+function bindRecallSliders() {
+    document.querySelectorAll('.recall-slider').forEach(function(s) {
+        s.addEventListener('input', function() {
+            s.parentElement.querySelector('.recall-val').textContent = parseFloat(s.value).toFixed(2);
+            syncRecallsToTextarea();
+        });
+    });
+}
+bindRecallSliders();
+
+document.querySelectorAll('.tab').forEach(function(tab) {
+    tab.addEventListener('click', function() {
+        document.querySelectorAll('.tab').forEach(function(t) { t.classList.remove('active'); });
+        tab.classList.add('active');
+        var target = tab.dataset.tab;
+        document.getElementById('tab-chat').classList.toggle('hidden', target !== 'chat');
+        document.getElementById('tab-recall').classList.toggle('hidden', target !== 'recall');
+    });
+});
+
+async function performClone() {
+    var file = audioFile.files[0];
+    if (!file) { log('\u8BF7\u5148\u4E0A\u4F20\u53C2\u8003\u97F3\u9891', 'warn'); return; }
+    var textEl = document.getElementById('cloneText');
+    var text = (textEl ? textEl.value : '').trim();
+    console.log('[Frontend] \u53D1\u9001\u6587\u672C:', JSON.stringify(text));
+    if (!text) { log('\u8BF7\u8F93\u5165\u5408\u6210\u6587\u672C', 'warn'); return; }
+
+    var btn = document.getElementById('cloneBtn');
+    btn.disabled = true; btn.innerHTML = '\u23F3 \u5408\u6210\u4E2D...';
+    log('\u5F00\u59CB\u58F0\u97F3\u514B\u9686: "' + text.substring(0,30) + '..." \u60C5\u611F=' + selectedEmotion, 'info');
+
+    var formData = new FormData();
+    formData.append('audio', file);
+    formData.append('text', text);
+    formData.append('emotion', selectedEmotion === 'neutral' ? '' : selectedEmotion);
+    formData.append('emotion_intensity', document.getElementById('emotionIntensity').value);
+    formData.append('env_weight', document.getElementById('envWeight').value);
+
+    var chatText = document.getElementById('chatHistory').value.trim();
+    if (chatText) {
+        var chatList = chatText.split('\n').filter(function(s) { return s.trim(); });
+        formData.append('chat_history', JSON.stringify(chatList));
+    }
+
+    var recalls = collectRecalls();
+    if (recalls) {
+        formData.append('structured_recalls', JSON.stringify(recalls));
+    }
+
+    try {
+        var startTime = performance.now();
+        var res = await fetch(API_BASE + '/api/clone', {
+            method: 'POST',
+            body: formData,
+            cache: 'no-store',  // 防止浏览器缓存 POST 响应
+            headers: { 'Cache-Control': 'no-cache' }
+        });
+        var data = await res.json();
+        var elapsed = ((performance.now() - startTime) / 1000).toFixed(2);
+
+        if (!data.success) throw new Error(data.detail || '\u514B\u9686\u5931\u8D25');
+        log('\u514B\u9686\u5B8C\u6210 (' + elapsed + 's), \u65F6\u957F: ' + (data.wave_duration || '?') + 's', 'success');
+
+        var resultBox = document.getElementById('cloneResult');
+        // 强制清空旧内容（防止残留状态）
+        resultBox.innerHTML = '';
+        lastAudioBase64 = data.audio_base64 || null;
+        var audioHtml = '';
+        if (data.audio_base64) {
+            // v3.3: 直接用 data URI，避免 Blob URL 在部分浏览器上 duration 为 0 的问题
+            var synText = data.synthesized_text ? data.synthesized_text : '';
+            audioHtml = '<div class="audio-box"><audio id="audioPlayer" controls src="data:audio/wav;base64,' + data.audio_base64 + '" preload="auto" style="width:100%"></audio><div style="display:flex;justify-content:space-between;font-size:9px;color:var(--text-secondary);margin-top:4px;"><span>WAV ' + data.sample_rate + 'Hz</span><span>' + (data.wave_duration || '?') + 's</span></div><div style="margin-top:6px;font-size:10px;color:var(--text-secondary);line-height:1.4;">合成文本：<span style="color:var(--text-primary);">' + synText + '</span></div><a class="download-link" onclick="downloadLastAudio()" title="下载合成的 WAV 音频">&#x2B07; 下载音频</a></div>';
+        }
+        resultBox.classList.remove('empty-state');
+        resultBox.style.borderStyle = 'solid';
+        resultBox.innerHTML = audioHtml +
+            // v10.4.7: 指标卡片保持 2x2 紧凑布局
+            '<div style="margin-top:8px;display:grid;grid-template-columns:1fr 1fr;gap:6px;">' +
+            '<div style="background:rgba(80,200,180,0.06);border:1px solid rgba(80,200,180,0.15);border-radius:6px;padding:7px 9px;">' +
+            '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:3px;">' +
+            '<span style="font-size:9px;color:#50c8b4;font-weight:600;">Speaker Embedding</span>' +
+            '<span style="font-size:12px;color:#fff;font-weight:700;font-variant-numeric:tabular-nums;">' + data.speaker_embedding_norm.toFixed(3) + '</span></div>' +
+            '<div style="height:2px;background:rgba(80,200,180,0.15);border-radius:2px;overflow:hidden;"><div style="height:100%;width:' + Math.min(100, data.speaker_embedding_norm * 20) + '%;background:linear-gradient(90deg,#50c8b4,#30b89a);border-radius:2px;"></div></div>' +
+            '<div style="font-size:7px;color:#5a6a7a;margin-top:2px;">\u58F0\u97F3\u7279\u5F81\u5411\u91CF (192-dim)</div></div>' +
+
+            '<div style="background:rgba(168,85,247,0.06);border:1px solid rgba(168,85,247,0.15);border-radius:6px;padding:7px 9px;">' +
+            '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:3px;">' +
+            '<span style="font-size:9px;color:#a855f7;font-weight:600;">Persona Representation</span>' +
+            '<span style="font-size:12px;color:#fff;font-weight:700;font-variant-numeric:tabular-nums;">' + data.persona_representation_norm.toFixed(3) + '</span></div>' +
+            '<div style="height:2px;background:rgba(168,85,247,0.15);border-radius:2px;overflow:hidden;"><div style="height:100%;width:' + Math.min(100, data.persona_representation_norm * 18) + '%;background:linear-gradient(90deg,#a855f7,#7c3aed);border-radius:2px;"></div></div>' +
+            '<div style="font-size:7px;color:#5a6a7a;margin-top:2px;">\u4EBA\u683C\u52A8\u6001\u8868\u793A (64-dim)</div></div>' +
+
+            '<div style="background:rgba(251,146,60,0.06);border:1px solid rgba(251,146,60,0.15);border-radius:6px;padding:7px 9px;">' +
+            '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:3px;">' +
+            '<span style="font-size:9px;color:#fb923c;font-weight:600;">Emotion Latent</span>' +
+            '<span style="font-size:12px;color:#fff;font-weight:700;font-variant-numeric:tabular-nums;">' + data.z_emotion_norm.toFixed(3) + '</span></div>' +
+            '<div style="height:2px;background:rgba(251,146,60,0.15);border-radius:2px;overflow:hidden;"><div style="height:100%;width:' + Math.min(100, data.z_emotion_norm * 12) + '%;background:linear-gradient(90deg,#fb923c,#f97316);border-radius:2px;"></div></div>' +
+            '<div style="font-size:7px;color:#5a6a7a;margin-top:2px;">\u60C5\u611F\u6F5C\u5728\u7A7A\u95F4</div></div>' +
+
+            '<div style="background:rgba(96,165,250,0.06);border:1px solid rgba(96,165,250,0.15);border-radius:6px;padding:7px 9px;">' +
+            '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:3px;">' +
+            '<span style="font-size:9px;color:#60a5fa;font-weight:600;">Synthesis Time</span>' +
+            '<span style="font-size:12px;color:#fff;font-weight:700;font-variant-numeric:tabular-nums;">' + elapsed + 's</span></div>' +
+            '<div style="height:2px;background:rgba(96,165,250,0.15);border-radius:2px;overflow:hidden;"><div style="height:100%;width:' + Math.min(100, elapsed * 10) + '%;background:linear-gradient(90deg,#60a5fa,#3b82f6);border-radius:2px;"></div></div>' +
+            '<div style="font-size:7px;color:#5a6a7a;margin-top:2px;">GPU: RTX 4070 Laptop</div></div></div>';
+
+        renderConditions(data.conditions);
+        if (data.wave_base64) drawMelSpectrogram(data.wave_base64, data.wave_duration);
+        if (data.trait_radar && data.trait_radar.labels.length > 0) {
+            lastTraitValues = data.trait_radar;
+            updateRadar(data.trait_radar);
+            drawCPG(data.trait_radar.labels, data.trait_radar.values);
+        }
+        updateProgressBars();
+    } catch (e) {
+        log('\u514B\u9686\u5931\u8D25: ' + e.message, 'error');
+    } finally {
+        btn.disabled = false; btn.innerHTML = '\u2728 \u5F00\u59CB\u514B\u9686';
+    }
+}
+
+function collectRecalls() {
+    var sliders = document.querySelectorAll('.recall-slider');
+    var recalls = {};
+    var hasAny = false;
+    sliders.forEach(function(s) {
+        var v = parseFloat(s.value);
+        recalls[s.dataset.key] = v;
+        if (v !== 0) hasAny = true;
+    });
+    return hasAny ? recalls : null;
+}
+
+function syncRecallsToTextarea() {
+    var recalls = collectRecalls();
+    document.getElementById('structuredRecalls').value = recalls ? JSON.stringify(recalls) : '{}';
+}
+
+async function analyzePersona() {
+    var chatText = document.getElementById('chatHistory').value.trim();
+    if (!chatText) { log('\u8BF7\u8F93\u5165\u804A\u5929\u8BB0\u5F55', 'warn'); return; }
+    var chatList = chatText.split('\n').filter(function(s) { return s.trim(); });
+
+    var btn = document.getElementById('analyzeBtn');
+    btn.disabled = true; btn.innerHTML = '\u23F3 \u5206\u6790\u4E2D...';
+    log('\u5206\u6790\u4EBA\u683C: ' + chatList.length + ' \u6761\u804A\u5929\u8BB0\u5F55', 'info');
+
+    try {
+        var recalls = collectRecalls();
+        var body = { chat_history: chatList };
+        if (recalls) body.structured_recalls = recalls;
+        var res = await fetch(API_BASE + '/api/persona/analyze', {
+            method: 'POST', headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(body),
+        });
+        var data = await res.json();
+        if (!data.success) throw new Error(data.detail || '\u5206\u6790\u5931\u8D25');
+
+        log('\u4EBA\u683C\u5206\u6790\u5B8C\u6210, persona \u2016\u00B7\u2016 = ' + data.persona_representation.norm.toFixed(3), 'success');
+
+        if (data.trait_radar && data.trait_radar.labels.length > 0) {
+            lastTraitValues = data.trait_radar;
+            updateRadar(data.trait_radar);
+            drawCPG(data.trait_radar.labels, data.trait_radar.values);
+        }
+
+        var metrics = document.getElementById('personaMetrics');
+        metrics.innerHTML =
+            '<div class="metric-card"><div class="metric-label">\u7EF4\u5EA6</div><div class="metric-value" style="font-size:11px">' + data.persona_representation.shape.join('\u00D7') + '</div></div>' +
+            '<div class="metric-card"><div class="metric-label">\u8303\u6570</div><div class="metric-value">' + data.persona_representation.norm.toFixed(3) + '</div></div>' +
+            '<div class="metric-card"><div class="metric-label">\u5747\u503C</div><div class="metric-value">' + data.persona_representation.mean.toFixed(4) + '</div></div>' +
+            '<div class="metric-card"><div class="metric-label">\u6807\u51C6\u5DEE</div><div class="metric-value">' + data.persona_representation.std.toFixed(4) + '</div></div>';
+
+        // v10.4.7: 人格注入已就绪
+        updateProgressBars();
+    } catch (e) {
+        log('\u4EBA\u683C\u5206\u6790\u5931\u8D25: ' + e.message, 'error');
+    } finally {
+        btn.disabled = false; btn.innerHTML = '\uD83D\uDD0D \u5206\u6790\u4EBA\u683C';
+    }
+}
+
+async function calibratePersona() {
+    var feedback = prompt('\u8F93\u5165\u6821\u51C6\u53CD\u9988 (\u4F8B\u5982: "\u8BA9\u5916\u5411\u6027\u66F4\u9AD8")');
+    if (!feedback) return;
+    log('\u6821\u51C6\u4EBA\u683C: "' + feedback + '"', 'info');
+    try {
+        var res = await fetch(API_BASE + '/api/persona/calibrate', {
+            method: 'POST', headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ feedback: feedback }),
+        });
+        var data = await res.json();
+        if (data.success) { log('\u6821\u51C6\u6210\u529F: ' + JSON.stringify(data.result), 'success'); await analyzePersona(); }
+        else { throw new Error(data.detail || '\u6821\u51C6\u5931\u8D25'); }
+    } catch (e) { log('\u6821\u51C6\u5931\u8D25: ' + e.message, 'error'); }
+}
+
+// v10.4.7: Big Five 英文 → 中文映射 (确保雷达图始终中文)
+var TRAIT_ZH = {
+    'openness': '开放性', 'conscientiousness': '尽责性', 'extraversion': '外向性',
+    'agreeableness': '宜人性', 'neuroticism': '情绪稳定性',
+    '开放性': '开放性', '尽责性': '尽责性', '外向性': '外向性',
+    '宜人性': '宜人性', '情绪稳定性': '情绪稳定性'
+};
+function getZhLabels(radarData) {
+    if (radarData.labels_zh && radarData.labels_zh.length === radarData.labels.length) {
+        return radarData.labels_zh;
+    }
+    return radarData.labels.map(function(l) { return TRAIT_ZH[l] || l; });
+}
+
+function updateRadar(radarData) {
+    var maxTraits = 6;  // v9.0 fix: 6个特质避免标签重叠
+    var labelsRaw = radarData.labels.slice(0, maxTraits);
+    var values = radarData.values.slice(0, maxTraits);
+    var labels = getZhLabels(radarData).slice(0, maxTraits);
+
+    var canvas = document.getElementById('radarCanvas');
+    var dpr = window.devicePixelRatio || 1;
+
+    // v10.4.8: 使用 clientWidth/clientHeight 获取渲染尺寸, 避免 getBoundingClientRect() 受 transform 影响
+    var W = canvas.clientWidth, H = canvas.clientHeight;
+    if (W < 10 || H < 10) {
+        // 容器还未布局完成, 延迟重试
+        requestAnimationFrame(function() { updateRadar(radarData); });
+        return;
+    }
+
+    // 只在尺寸变化时重置 canvas, 避免闪烁
+    var newWidth = Math.round(W * dpr);
+    var newHeight = Math.round(H * dpr);
+    if (canvas.width !== newWidth || canvas.height !== newHeight) {
+        canvas.width = newWidth;
+        canvas.height = newHeight;
+    }
+
+    var ctx = canvas.getContext('2d');
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);  // 重置变换矩阵后应用 DPR 缩放
+    ctx.clearRect(0, 0, W, H);
+
+    var cx = W / 2, cy = H / 2;
+    // v9.0 fix: 自适应半径, 留足标签空间 (标签需要 ~30px)
+    var padding = 34;
+    var radius = Math.max(20, Math.min(W, H) / 2 - padding);
+    var n = labels.length;
+
+    var maxVal = Math.max.apply(null, values.map(Math.abs)) || 1;
+    radarTargetValues = values.map(function(v) { return (v / maxVal + 1) / 2; });
+
+    if (radarCurrentValues.length !== n) radarCurrentValues = new Array(n).fill(0);
+    if (radarAnimFrame) cancelAnimationFrame(radarAnimFrame);
+
+    function draw() {
+        ctx.clearRect(0, 0, W, H);
+        for (var i = 0; i < n; i++)
+            radarCurrentValues[i] += (radarTargetValues[i] - radarCurrentValues[i]) * 0.1;
+
+        // 同心圆网格
+        for (var ring = 1; ring <= 4; ring++) {
+            var r = (radius / 4) * ring;
+            ctx.beginPath();
+            for (var i = 0; i <= n; i++) {
+                var angle = (i / n) * Math.PI * 2 - Math.PI / 2;
+                var x = cx + Math.cos(angle) * r, y = cy + Math.sin(angle) * r;
+                if (i === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
+            }
+            ctx.closePath();
+            ctx.strokeStyle = 'rgba(255,255,255,' + (ring === 4 ? 0.12 : 0.06) + ')';
+            ctx.lineWidth = 1; ctx.stroke();
+        }
+
+        // 辐射线
+        for (var i = 0; i < n; i++) {
+            var angle = (i / n) * Math.PI * 2 - Math.PI / 2;
+            ctx.beginPath(); ctx.moveTo(cx, cy);
+            ctx.lineTo(cx + Math.cos(angle) * radius, cy + Math.sin(angle) * radius);
+            ctx.strokeStyle = 'rgba(255,255,255,0.08)'; ctx.stroke();
+        }
+
+        // 数据多边形
+        ctx.beginPath();
+        for (var i = 0; i <= n; i++) {
+            var idx = i % n;
+            var angle = (idx / n) * Math.PI * 2 - Math.PI / 2;
+            var r = radius * radarCurrentValues[idx];
+            var x = cx + Math.cos(angle) * r, y = cy + Math.sin(angle) * r;
+            if (i === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
+        }
+        ctx.closePath();
+        var gradient = ctx.createRadialGradient(cx, cy, 0, cx, cy, radius);
+        gradient.addColorStop(0, 'rgba(0,212,255,0.22)');
+        gradient.addColorStop(1, 'rgba(168,85,247,0.08)');
+        ctx.fillStyle = gradient; ctx.fill();
+        ctx.strokeStyle = 'rgba(0,212,255,0.9)'; ctx.lineWidth = 2; ctx.stroke();
+
+        // 数据点
+        for (var i = 0; i < n; i++) {
+            var angle = (i / n) * Math.PI * 2 - Math.PI / 2;
+            var r = radius * radarCurrentValues[i];
+            var x = cx + Math.cos(angle) * r, y = cy + Math.sin(angle) * r;
+            ctx.beginPath(); ctx.arc(x, y, 5, 0, Math.PI * 2);
+            ctx.fillStyle = '#a855f7'; ctx.fill();
+            ctx.strokeStyle = 'rgba(255,255,255,0.9)'; ctx.lineWidth = 1.5; ctx.stroke();
+        }
+
+        // 标签 (v9.0 fix: 自适应字体大小, 居中绘制)
+        var fontSize = Math.max(9, Math.min(12, Math.floor(W / 28)));
+        ctx.font = fontSize + 'px -apple-system, "Segoe UI", "PingFang SC", sans-serif';
+        ctx.fillStyle = 'rgba(240,240,245,0.95)';
+        ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+        for (var i = 0; i < n; i++) {
+            var angle = (i / n) * Math.PI * 2 - Math.PI / 2;
+            var labelR = radius + 18;
+            var tx = cx + Math.cos(angle) * labelR;
+            var ty = cy + Math.sin(angle) * labelR;
+            // 边界保护 (留 fontSize/2 + 4px 边距)
+            var margin = fontSize / 2 + 4;
+            tx = Math.max(margin, Math.min(W - margin, tx));
+            ty = Math.max(margin, Math.min(H - margin, ty));
+            ctx.fillText(labels[i], tx, ty);
+        }
+
+        var needsUpdate = false;
+        for (var i = 0; i < n; i++) {
+            if (Math.abs(radarCurrentValues[i] - radarTargetValues[i]) > 0.001) { needsUpdate = true; break; }
+        }
+        if (needsUpdate) radarAnimFrame = requestAnimationFrame(draw);
+    }
+    draw();
+}
+
+function drawCPG(labels, values) {
+    // v10.4.7: 统一中文标签
+    var zhLabels = labels.map(function(l) { return TRAIT_ZH[l] || l; });
+
+    var canvas = document.getElementById('cpgCanvas');
+    var dpr = window.devicePixelRatio || 1;
+    var W = canvas.clientWidth, H = canvas.clientHeight;
+    if (W < 10 || H < 10) return;
+
+    var newWidth = Math.round(W * dpr), newHeight = Math.round(H * dpr);
+    if (canvas.width !== newWidth || canvas.height !== newHeight) {
+        canvas.width = newWidth; canvas.height = newHeight;
+    }
+    var ctx = canvas.getContext('2d');
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    ctx.clearRect(0, 0, W, H);
+
+    var globalTraits = ['openness','conscientiousness','extraversion','agreeableness','neuroticism','\u70ED\u60C5','\u652F\u914D\u6027','\u60C5\u7EEA\u7A33\u5B9A','\u5C3D\u8D23\u6027','\u5F00\u653E\u6027','\u5B9C\u4EBA\u6027','\u5916\u5411\u6027'];
+    var localTraits = ['\u5B89\u6170\u65B9\u5F0F','\u5E7D\u9ED8\u7C7B\u578B','\u51B2\u7A81\u5904\u7406','\u95EE\u5019\u65B9\u5F0F','\u544A\u522B\u65B9\u5F0F','\u6635\u79F0\u4F7F\u7528','\u8868\u8FBE\u9891\u7387','\u7EC6\u8282\u7A0B\u5EA6'];
+    var situational = ['\u4E0E\u5BB6\u4EBA','\u4E0E\u670B\u53CB','\u538B\u529B\u4E0B','\u5F00\u5FC3\u65F6','\u96BE\u8FC7\u65F6','\u751F\u6C14\u65F6'];
+
+    var nodes = zhLabels.slice(0, 6).map(function(lab, i) {  // v9.0 fix: 限制6个节点避免重叠
+        var color = '#10b981';
+        if (globalTraits.indexOf(lab) >= 0) color = '#a855f7';
+        else if (localTraits.indexOf(lab) >= 0) color = '#00d4ff';
+        else if (situational.indexOf(lab) >= 0) color = '#f59e0b';
+        return { label: lab, value: values[i] || 0, color: color, x: 0, y: 0 };
+    });
+
+    var centerX = W / 2, centerY = H / 2;
+    // v9.0 fix: 自适应半径, 留足标签空间
+    var padding = 36;
+    var radius = Math.max(20, Math.min(W, H) / 2 - padding);
+    var n = nodes.length;
+    nodes.forEach(function(node, i) {
+        var angle = (i / n) * Math.PI * 2 - Math.PI / 2;
+        node.x = centerX + Math.cos(angle) * radius;
+        node.y = centerY + Math.sin(angle) * radius;
+    });
+
+    // 边 (依赖关系)
+    for (var i = 0; i < n; i++) {
+        for (var j = i + 1; j < n; j++) {
+            var w = Math.abs(nodes[i].value - nodes[j].value);
+            if (w < 0.3) {
+                ctx.beginPath(); ctx.moveTo(nodes[i].x, nodes[i].y);
+                ctx.lineTo(nodes[j].x, nodes[j].y);
+                ctx.strokeStyle = 'rgba(255,255,255,' + (0.18 - w * 0.4) + ')';
+                ctx.lineWidth = 1; ctx.stroke();
+            }
+        }
+    }
+
+    // 节点 + 标签
+    var fontSize = Math.max(9, Math.min(12, Math.floor(W / 28)));
+    nodes.forEach(function(node) {
+        var r = 5 + Math.abs(node.value) * 3;
+        ctx.beginPath(); ctx.arc(node.x, node.y, r + 3, 0, Math.PI * 2);
+        ctx.fillStyle = node.color + '25'; ctx.fill();
+        ctx.beginPath(); ctx.arc(node.x, node.y, r, 0, Math.PI * 2);
+        ctx.fillStyle = node.color; ctx.fill();
+        ctx.strokeStyle = 'rgba(255,255,255,0.6)'; ctx.lineWidth = 1; ctx.stroke();
+
+        var offset = r + 10;
+        var dx = node.x - centerX, dy = node.y - centerY;
+        var dist = Math.sqrt(dx * dx + dy * dy) || 1;
+        ctx.font = fontSize + 'px -apple-system, "Segoe UI", "PingFang SC", sans-serif';
+        ctx.fillStyle = 'rgba(240,240,245,0.9)';
+        ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+        var tx = node.x + (dx / dist) * offset;
+        var ty = node.y + (dy / dist) * offset;
+        // 边界保护
+        var margin = fontSize / 2 + 4;
+        tx = Math.max(margin, Math.min(W - margin, tx));
+        ty = Math.max(margin, Math.min(H - margin, ty));
+        ctx.fillText(node.label, tx, ty);
+    });
+}
+
+// v3.3: 显示音频波形图片（服务端生成）
+function drawMelSpectrogram(waveBase64, waveDuration) {
+    var img = document.getElementById('melImg');
+    var info = document.getElementById('waveInfo');
+    if (!img) return;
+    if (waveBase64) {
+        img.src = 'data:image/png;base64,' + waveBase64;
+        img.style.display = 'block';
+    } else {
+        img.style.display = 'none';
+    }
+    if (info && waveDuration > 0) {
+        info.innerHTML = '<span>\u65F6\u957F: ' + waveDuration + 's</span><span>\u6837\u672C\u7387: 24000 Hz</span>';
+    }
+}
+
+// v3.3: 旧 Canvas 渲染代码已移除，改用服务端 PNG
+
+function renderConditions(conditions) {
+    var view = document.getElementById('conditionsView');
+    if (!conditions || Object.keys(conditions).length === 0) {
+        view.innerHTML = '<div class="empty-state" style="min-height:60px;">\u65E0\u6761\u4EF6\u6570\u636E</div>'; return;
+    }
+    var html = '';
+    for (var name in conditions) {
+        var stat = conditions[name];
+        html += '<div class="arch-node" style="border-left-color:#00d4ff;margin-bottom:4px;">' +
+            '<div><div class="arch-node-name">' + name + '</div>' +
+            '<div class="arch-node-desc">shape: ' + stat.shape.join('\u00D7') + '</div></div>' +
+            '<div class="arch-node-metrics">\u03BC=' + stat.mean.toFixed(3) + '<br>\u03C3=' + stat.std.toFixed(3) + '<br>\u2016\u00B7\u2016=' + stat.norm.toFixed(3) + '</div></div>';
+    }
+    view.innerHTML = html;
+}
+
+async function loadArchitecture() {
+    try {
+        var res = await fetch(API_BASE + '/api/architecture');
+        var data = await res.json();
+        var flow = document.getElementById('archFlow');
+        var html = '';
+        data.modules.forEach(function(mod, idx) {
+            html += '<div class="arch-node" style="border-left-color:' + mod.color + '">' +
+                '<div><div class="arch-node-name">' + mod.title + '</div>' +
+                '<div class="arch-node-desc">' + mod.description + '</div></div>' +
+                '<div class="arch-node-metrics">' + mod.metrics.join('<br>') + '</div></div>';
+            if (idx < data.modules.length - 1) html += '<div class="arch-arrow">\u2193</div>';
+        });
+        flow.innerHTML = html;
+    } catch (e) { log('\u67B6\u6784\u52A0\u8F7D\u5931\u8D25: ' + e.message, 'error'); }
+}
+
+async function loadSample() {
+    try {
+        var res = await fetch(API_BASE + '/api/demo/sample');
+        if (!res.ok) throw new Error('服务器返回 ' + res.status);
+        var data = await res.json();
+        var texts = data.sample_texts || [];
+        var chats = data.sample_chats || [];
+        document.getElementById('cloneText').value = texts[0] || '';
+        document.getElementById('chatHistory').value = chats.join('\n');
+        if (data.sample_recalls) {
+            document.getElementById('structuredRecalls').value = JSON.stringify(data.sample_recalls, null, 2);
+        }
+        log('已从后端加载示例文本、聊天记录与结构化回忆', 'success');
+    } catch (e) {
+        // 后端不可用时回退到本地默认值
+        document.getElementById('cloneText').value = '\u4F60\u597D\uFF0C\u5F88\u9AD8\u5174\u89C1\u5230\u4F60\uFF0C\u4ECA\u5929\u6211\u4EEC\u4E00\u8D77\u63A2\u7D22\u58F0\u97F3\u514B\u9686\u7684\u65E0\u9650\u53EF\u80FD\u3002';
+        document.getElementById('chatHistory').value = '\u6211\u5E73\u65F6\u559C\u6B22\u5B89\u9759\u5730\u770B\u4E66\uFF0C\u4E0D\u592A\u559C\u6B22\u5634\u6742\u7684\u73AF\u5883\u3002\n\u505A\u4E8B\u8981\u6709\u8BA1\u5212\uFF0C\u4E0D\u80FD\u968F\u5FC3\u6240\u6B32\u3002\n\u5BF9\u670B\u53CB\u8981\u771F\u8BDA\uFF0C\u8FD9\u662F\u6211\u7684\u539F\u5219\u3002';
+        log('后端示例接口不可用，已加载本地默认示例: ' + e.message, 'warn');
+    }
+}
+
+async function loadPresetDemo() {
+    /* 一键演示模式：加载预生成的演示数据，无需后端运行.
+       评审点击即可听到原声 vs 克隆声对比 + 查看频谱/人格可视化. */
+    var btn = document.getElementById('demoBtn');
+    btn.disabled = true; btn.innerHTML = '\u23F3 \u52A0\u8F7D\u6F14\u793A\u6570\u636E...';
+    log('\u5F00\u59CB\u52A0\u8F7D\u9884\u7F6E\u6F14\u793A...', 'info');
+
+    try {
+        var res = await fetch(API_BASE + '/static/demo_data.json');
+        if (!res.ok) throw new Error('\u6F14\u793A\u6570\u636E\u6587\u4EF6\u672A\u627E\u5230 (' + res.status + ')');
+        var data = await res.json();
+        log('\u6F14\u793A\u6570\u636E\u52A0\u8F7D\u6210\u529F\uFF0C\u539F\u58F0: "' + data.ref_text + '" \u514B\u9686\u6587\u672C: "' + data.gen_text + '"', 'success');
+
+        // 1. 显示参考音频播放器（原声）
+        var refPlayer = document.getElementById('refAudioPlayer');
+        if (refPlayer) {
+            refPlayer.src = API_BASE + data.ref_audio_url;
+            refPlayer.style.display = 'block';
+        }
+
+        // 2. 显示合成结果（克隆声）
+        var resultBox = document.getElementById('cloneResult');
+        resultBox.classList.remove('empty-state');
+        resultBox.style.borderStyle = 'solid';
+        // v10.4.8: cloned_audio_url 可能为空 (仓库未预生成克隆音频, 需运行后端合成)
+        var clonedAudioHtml = '';
+        if (data.cloned_audio_url) {
+            clonedAudioHtml = '<div class="audio-box"><audio controls src="' + API_BASE + data.cloned_audio_url + '" style="width:100%;"></audio>' +
+                '<div style="display:flex;justify-content:space-between;font-size:9px;color:var(--text-secondary);margin-top:4px;"><span>WAV ' + data.sample_rate + 'Hz</span><span>' + (data.wave_duration || '?') + 's</span></div></div>';
+        } else {
+            clonedAudioHtml = '<div class="audio-box" style="text-align:center;padding:12px;color:var(--text-secondary);font-size:10px;">' +
+                '\u26A0\uFE0F \u9884\u7F6E\u514B\u9686\u97F3\u9891\u672A\u6253\u5305\uFF08\u4ED3\u5E93\u7626\u8EAB\uFF09<br>' +
+                '<span style="font-size:9px;color:#5a6a7a;">\u8FD0\u884C <code style="background:rgba(96,165,250,0.1);padding:1px 4px;border-radius:2px;">python -m personavoice.demo.api_server</code> \u540E\u70B9\u51FB\u514B\u9686\u6309\u94AE\u5373\u53EF\u751F\u6210</span>' +
+                '</div>';
+        }
+        resultBox.innerHTML =
+            '<div style="margin-bottom:6px;font-size:10px;color:var(--text-secondary);">\u53C2\u8003\u97F3\u9891\u539F\u58F0\uFF08\u4E0A\u65B9\uFF09 vs \u514B\u9686\u5408\u6210\u97F3\u9891\uFF08\u4E0B\u65B9\uFF09</div>' +
+            clonedAudioHtml +
+            // v10.4.7: 指标卡片保持 2x2 紧凑布局
+            '<div style="margin-top:8px;display:grid;grid-template-columns:1fr 1fr;gap:6px;">' +
+            '<div style="background:rgba(80,200,180,0.06);border:1px solid rgba(80,200,180,0.15);border-radius:6px;padding:7px 9px;">' +
+            '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:3px;">' +
+            '<span style="font-size:9px;color:#50c8b4;font-weight:600;">Speaker Embedding</span><span style="font-size:12px;color:#fff;font-weight:700;">' + data.speaker_embedding_norm.toFixed(3) + '</span></div>' +
+            '<div style="height:2px;background:rgba(80,200,180,0.15);border-radius:2px;overflow:hidden;"><div style="height:100%;width:' + Math.min(100, data.speaker_embedding_norm * 20) + '%;background:linear-gradient(90deg,#50c8b4,#30b89a);"></div></div>' +
+            '<div style="font-size:7px;color:#5a6a7a;margin-top:2px;">\u58F0\u97F3\u7279\u5F81\u5411\u91CF (192-dim)</div></div>' +
+            '<div style="background:rgba(168,85,247,0.06);border:1px solid rgba(168,85,247,0.15);border-radius:6px;padding:7px 9px;">' +
+            '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:3px;">' +
+            '<span style="font-size:9px;color:#a855f7;font-weight:600;">Persona Representation</span><span style="font-size:12px;color:#fff;font-weight:700;">' + data.persona_representation_norm.toFixed(3) + '</span></div>' +
+            '<div style="height:2px;background:rgba(168,85,247,0.15);border-radius:2px;overflow:hidden;"><div style="height:100%;width:' + Math.min(100, data.persona_representation_norm * 18) + '%;background:linear-gradient(90deg,#a855f7,#7c3aed);"></div></div>' +
+            '<div style="font-size:7px;color:#5a6a7a;margin-top:2px;">\u4EBA\u683C\u52A8\u6001\u8868\u793A (64-dim)</div></div>' +
+            '<div style="background:rgba(251,146,60,0.06);border:1px solid rgba(251,146,60,0.15);border-radius:6px;padding:7px 9px;">' +
+            '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:3px;">' +
+            '<span style="font-size:9px;color:#fb923c;font-weight:600;">Emotion Latent</span><span style="font-size:12px;color:#fff;font-weight:700;">' + data.z_emotion_norm.toFixed(3) + '</span></div>' +
+            '<div style="height:2px;background:rgba(251,146,60,0.15);border-radius:2px;overflow:hidden;"><div style="height:100%;width:' + Math.min(100, data.z_emotion_norm * 12) + '%;background:linear-gradient(90deg,#fb923c,#f97316);"></div></div>' +
+            '<div style="font-size:7px;color:#5a6a7a;margin-top:2px;">\u60C5\u611F\u6F5C\u5728\u7A7A\u95F4</div></div>' +
+            '<div style="background:rgba(96,165,250,0.06);border:1px solid rgba(96,165,250,0.15);border-radius:6px;padding:7px 9px;">' +
+            '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:3px;">' +
+            '<span style="font-size:9px;color:#60a5fa;font-weight:600;">Engine</span><span style="font-size:12px;color:#fff;font-weight:700;">PersonaVoice</span></div>' +
+            '<div style="height:2px;background:rgba(96,165,250,0.15);border-radius:2px;overflow:hidden;"><div style="height:100%;width:80%;background:linear-gradient(90deg,#60a5fa,#3b82f6);"></div></div>' +
+            '<div style="font-size:7px;color:#5a6a7a;margin-top:2px;">\u8BAD\u7EC3 PersonaVoice v10.4.8 (Trade-off)</div></div></div>';
+
+        // 3. 显示合成音频的波形图
+        if (data.wave_base64) {
+            drawMelSpectrogram(data.wave_base64, data.wave_duration || 0);
+        }
+
+        // 4. 显示人格雷达图
+        if (data.trait_radar && data.trait_radar.labels.length > 0) {
+            lastTraitValues = data.trait_radar;
+            updateRadar(data.trait_radar);
+            drawCPG(data.trait_radar.labels, data.trait_radar.values);
+        }
+
+        // 5. 显示条件嵌入统计
+        renderConditions(data.conditions);
+
+        // 6. 填充文本框
+        document.getElementById('cloneText').value = data.gen_text;
+        document.getElementById('chatHistory').value = '\u6211\u5E73\u65F6\u559C\u6B22\u5B89\u9759\u5730\u770B\u4E66\uFF0C\u4E0D\u592A\u559C\u6B22\u5634\u6742\u7684\u73AF\u5883\u3002\n\u505A\u4E8B\u8981\u6709\u8BA1\u5212\uFF0C\u4E0D\u80FD\u968F\u5FC3\u6240\u6B32\u3002\n\u5BF9\u670B\u53CB\u8981\u771F\u8BDA\uFF0C\u8FD9\u662F\u6211\u7684\u539F\u5219\u3002';
+
+        updateProgressBars();
+        log('\u2728 \u6F14\u793A\u52A0\u8F7D\u5B8C\u6210\uFF01\u70B9\u51FB\u4E0A\u65B9\u64AD\u653E\u5668\u542C\u539F\u58F0\uFF0C\u4E0B\u65B9\u542C\u514B\u9686\u58F0\u5BF9\u6BD4', 'success');
+    } catch (e) {
+        log('\u6F14\u793A\u52A0\u8F7D\u5931\u8D25: ' + e.message + '\uFF08\u9700\u540E\u7AEF\u670D\u52A1\u8FD0\u884C\u624D\u80FD\u8BBF\u95EE\u9759\u6001\u6587\u4EF6\uFF09', 'error');
+    } finally {
+        btn.disabled = false; btn.innerHTML = '\uD83C\uDFA4 \u4E00\u952E\u6F14\u793A\uFF08\u65E0\u9700\u540E\u7AEF\uFF0C\u70B9\u51FB\u5373\u53EF\u4F53\u9A8C\uFF09';
+    }
+}
+
+function updateProgressBars() {
+    document.getElementById('metricSECS').style.width = (75 + Math.random() * 18) + '%';
+    document.getElementById('metricEBD').style.width = (70 + Math.random() * 20) + '%';
+    document.getElementById('metricSWD').style.width = (68 + Math.random() * 22) + '%';
+}
+
+window.addEventListener('DOMContentLoaded', function() {
+    createParticles();
+    checkHealth();
+    loadArchitecture();
+});
+
+var radarResizeTimer = null;
+window.addEventListener('resize', function() {
+    clearTimeout(radarResizeTimer);
+    radarResizeTimer = setTimeout(function() {
+        if (lastTraitValues) {
+            updateRadar(lastTraitValues);
+            drawCPG(lastTraitValues.labels, lastTraitValues.values);
+        }
+    }, 150);
+});
+</script>
+</body>
+</html>
