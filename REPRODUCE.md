@@ -4,7 +4,9 @@ This branch is the standalone supplement snapshot for the two Zenodo preprints.
 The files in this branch correspond to **language preprint version
 `paper-language-v1.0`** and **speech preprint version `paper-speech-v1.0`**.
 It intentionally excludes the historical PersonaVoice runtime, model weights,
-private/raw audio, API keys, and deployment code.
+private/raw audio, API keys, deployment code, paper PDFs, LaTeX sources, and
+LaTeX template dependencies. The paper package is deposited separately on
+Zenodo.
 
 ## Quick verification
 
@@ -21,8 +23,8 @@ python reproduce.py --derive
 python reproduce.py --figures
 ```
 
-The figure command emits both PDF and editable SVG for the planner mechanism;
-all checked-in paper figures are already rendered release artifacts.
+The figure command emits PDF and editable SVG architecture figures directly
+inside the supplement packages; no paper source is required.
 
 ## Frozen item-level predictions
 
@@ -33,12 +35,14 @@ The package-level `SHA256SUMS.txt` files and the top-level manifest provide two
 independent integrity checks. Configuration, dataset fingerprints, evaluator
 definitions, and random seeds are recorded in [`reproducibility/config.json`](reproducibility/config.json).
 
-## Paper links
+## Paper relationship
 
-Code, frozen predictions, and SHA-256 manifests are available at:
+The support package, frozen predictions, and SHA-256 manifests are available at:
 <https://github.com/FinalSunFlower/PersonaVoice/tree/paper-supplement-v1.0>.
 The exact artifact snapshot corresponding to the language preprint is tagged
 `paper-language-v1.0`; the speech snapshot is tagged `paper-speech-v1.0`.
+The corresponding paper PDFs and LaTeX sources are distributed through the
+separate Zenodo deposition.
 
 Large model weights remain upstream under their original licenses. The frozen
 JSON snapshots are sufficient to audit the numerical claims without distributing

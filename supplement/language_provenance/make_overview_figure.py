@@ -32,7 +32,7 @@ def arrow(ax, start, end, color=MUTED, lw=1.4):
 
 def main():
     root = Path(__file__).resolve().parents[2]
-    out = root / "paper/figures/method_overview.pdf"
+    out = root / "supplement/language_provenance/figures/method_overview.pdf"
     fig, ax = plt.subplots(figsize=(12.0, 3.6), dpi=150)
     ax.set_xlim(0, 12.2); ax.set_ylim(0, 4); ax.axis("off")
     box(ax, 0.2, 1.75, 2.3, 1.25, "Typed evidence", "claim + source\nconsent / time", GRAY, MUTED, 13.8, 10.2)

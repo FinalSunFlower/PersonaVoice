@@ -2,9 +2,7 @@
 
 This repository is released as version `1.0.0` (25 August 2026) by Jiang
 Luchang. The release contains two canonical research objects. The primary
-language preprint:
-
-`paper/personavoice_preprint.pdf`
+language preprint PDF is supplied separately to Zenodo.
 
 It reports a provenance-constrained selective language planner and measured
 results on a public, speaker-disjoint controlled composition. It also includes
@@ -14,8 +12,8 @@ authorization labels. The paper does not claim natural memorial speech,
 psychological reconstruction, safe deployment, or an end-to-end acoustic
 result.
 
-The second research object is the independent speech preprint:
-`paper/personavoice_speech_preprint.pdf`. It reports measured one-second
+The second research object is the independent speech preprint PDF supplied
+separately to Zenodo. It reports measured one-second
 voice-cloning results from the repository's v10.4.x release, including
 SECS/WER trade-offs, external baselines, ablations, and catastrophic-failure
 analysis. It does not claim validated perceptual persona or emotion control.
@@ -24,8 +22,9 @@ The protocol-only draft is not part of the canonical release.
 
 ## Upload set
 
-Upload the two PDFs, `CITATION.cff`, `LICENSE`, the `paper/` source bundle, and
-the two `supplement/` packages. Do not upload private speaker material,
+Upload the two PDFs and their LaTeX source bundles from the paper workspace,
+plus `CITATION.cff`, `LICENSE`, and the two `supplement/` packages from this
+branch. Do not upload private speaker material,
 raw consent records, model weights, API keys, or local environment files.
 
 ## Suggested Zenodo metadata
@@ -43,7 +42,5 @@ raw consent records, model weights, API keys, or local environment files.
 Zenodo assigns the DOI after deposition. Once assigned, add it to the final
 record and the preferred citation; do not invent a DOI in source files.
 
-## PDF checksums
-
-- `paper/personavoice_preprint.pdf`: `84d4efecc910f10ec700b197ac593a52d7144426df38b8909668e903ae149ce5`
-- `paper/personavoice_speech_preprint.pdf`: `6a46025035d9c5e09f1048da0d83b62de08a864590ee52af1f240c879949ee0a`
+The paper PDFs are not duplicated in this GitHub support branch; record their
+checksums in the Zenodo deposition metadata when the final PDFs are uploaded.

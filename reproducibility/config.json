@@ -7,7 +7,7 @@
     "language": {
       "title": "Provenance-Constrained Selective Language Style Planning from Sparse Evidence",
       "version_tag": "paper-language-v1.0",
-      "source": "paper/personavoice_preprint.tex",
+      "paper_distribution": "separate Zenodo deposition (not duplicated in this support branch)",
       "frozen_prediction_files": [
         "supplement/language_provenance/artifacts/snli_semantic_mlp_seed0.json",
         "supplement/language_provenance/artifacts/snli_semantic_mlp_seed1.json",
@@ -25,7 +25,7 @@
     "speech": {
       "title": "PersonaVoice: One-Second Voice Cloning with Length-Adaptive Flow Matching",
       "version_tag": "paper-speech-v1.0",
-      "source": "paper/personavoice_speech_preprint.tex",
+      "paper_distribution": "separate Zenodo deposition (not duplicated in this support branch)",
       "frozen_prediction_files": [
         "supplement/speech_shortref/artifacts/eval_200_samples.json"
       ],

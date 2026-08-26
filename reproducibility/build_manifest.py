@@ -18,7 +18,10 @@ def iter_release_files():
         rel_parts = path.relative_to(ROOT).parts
         if any(part in SKIP_DIRS for part in rel_parts) or path.name in SKIP_NAMES:
             continue
-        if path.suffix.lower() in {".pyc", ".aux", ".bbl", ".blg", ".log", ".out"}:
+        if path.suffix.lower() in {
+            ".pyc", ".aux", ".bbl", ".blg", ".log", ".out", ".fdb_latexmk",
+            ".fls", ".synctex.gz",
+        }:
             continue
         yield path
 

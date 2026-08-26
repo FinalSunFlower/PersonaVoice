@@ -52,24 +52,24 @@ def draw(output: Path):
     ax.axis("off")
 
     # Inputs and shared representation.
-    box(ax, 0.20, 2.95, 1.55, 0.95, "Typed\nevidence", "source / time / stance", COLORS["input"], COLORS["muted"], 13.5, 9.5)
-    box(ax, 0.20, 0.85, 1.55, 0.95, "Candidate", "utterance $y$", COLORS["input"], COLORS["muted"], 13.5, 10.0)
-    box(ax, 2.05, 0.90, 1.90, 2.95, "Shared\nencoder", "frozen MiniLM or\nhashed CPU baseline\n\nseparate $h_E$ and $h_y$", COLORS["blue"], COLORS["blue_edge"], 15.0, 9.5, 2.0)
+    box(ax, 0.20, 2.95, 1.55, 0.95, "Typed\nevidence", "source / time\nstance", COLORS["input"], COLORS["muted"], 16.0, 10.5)
+    box(ax, 0.20, 0.85, 1.55, 0.95, "Candidate", "utterance $y$", COLORS["input"], COLORS["muted"], 16.0, 11.0)
+    box(ax, 2.05, 0.90, 1.90, 2.95, "Shared\nencoder", "frozen MiniLM or\nhashed CPU baseline\n\nseparate $h_E$ and $h_y$", COLORS["blue"], COLORS["blue_edge"], 18.0, 11.0, 2.0)
     arrow(ax, (1.80, 3.42), (2.00, 3.25))
     arrow(ax, (1.80, 1.32), (2.00, 1.65))
 
     # Three auditable branches.
-    box(ax, 4.35, 2.95, 1.85, 0.9, "Context\naggregation", "candidate-conditioned\nnot a citation", COLORS["teal"], COLORS["teal_edge"], 12.5, 8.8)
-    box(ax, 4.35, 1.75, 1.85, 0.9, "Evidence\nattribution", "per-item $a_i$\nevidence IDs", COLORS["green"], COLORS["green_edge"], 12.5, 8.8)
-    box(ax, 4.35, 0.55, 1.85, 0.9, "Observable\nstyle", "evidence/candidate\ndifference", COLORS["gold"], COLORS["gold_edge"], 12.5, 8.8)
+    box(ax, 4.35, 2.95, 1.85, 0.9, "Context\naggregation", "candidate-conditioned\nnot a citation", COLORS["teal"], COLORS["teal_edge"], 15.0, 10.0)
+    box(ax, 4.35, 1.75, 1.85, 0.9, "Evidence\nattribution", "per-item $a_i$\nevidence IDs", COLORS["green"], COLORS["green_edge"], 15.0, 10.0)
+    box(ax, 4.35, 0.55, 1.85, 0.9, "Observable\nstyle", "evidence/candidate\ndifference", COLORS["gold"], COLORS["gold_edge"], 15.0, 10.0)
     arrow(ax, (4.00, 3.25), (4.30, 3.35), COLORS["blue_edge"])
     arrow(ax, (4.00, 2.35), (4.30, 2.20), COLORS["blue_edge"])
     arrow(ax, (4.00, 1.55), (4.30, 1.00), COLORS["blue_edge"])
 
     # Inspectable gates before the final decision.
-    box(ax, 6.65, 2.95, 1.45, 0.9, "Task heads", "$p_s, p_c, p_y$\nsupport / conflict / style", COLORS["blue"], COLORS["blue_edge"], 11.0, 7.8)
-    box(ax, 6.65, 1.75, 1.45, 0.9, "Citation gate", "$\\max_i a_i \\geq \\theta_e$\nselected IDs", COLORS["green"], COLORS["green_edge"], 10.5, 7.8)
-    box(ax, 6.65, 0.55, 1.45, 0.9, "Style gate", "$p_y$ observable\nnot a trait claim", COLORS["gold"], COLORS["gold_edge"], 10.5, 7.8)
+    box(ax, 6.65, 2.95, 1.45, 0.9, "Task heads", "$p_s, p_c, p_y$\nsupport / conflict\nstyle", COLORS["blue"], COLORS["blue_edge"], 13.0, 9.0)
+    box(ax, 6.65, 1.75, 1.45, 0.9, "Citation gate", "$\\max_i a_i \\geq \\theta_e$\nselected IDs", COLORS["green"], COLORS["green_edge"], 12.5, 9.0)
+    box(ax, 6.65, 0.55, 1.45, 0.9, "Style gate", "$p_y$ observable\nnot a trait claim", COLORS["gold"], COLORS["gold_edge"], 12.5, 9.0)
     arrow(ax, (6.25, 3.40), (6.60, 3.40), COLORS["teal_edge"])
     arrow(ax, (6.25, 2.20), (6.60, 2.20), COLORS["green_edge"])
     arrow(ax, (6.25, 1.00), (6.60, 1.00), COLORS["gold_edge"])
@@ -77,17 +77,17 @@ def draw(output: Path):
     # Decision diamond and approved-text boundary.
     diamond = Polygon([[8.45, 2.2], [9.10, 2.85], [9.75, 2.2], [9.10, 1.55]], closed=True, facecolor=COLORS["red"], edgecolor=COLORS["red_edge"], linewidth=2.0, zorder=2)
     ax.add_patch(diamond)
-    ax.text(9.10, 2.36, "Calibrated", ha="center", va="center", fontsize=11.5, fontweight="bold", color=COLORS["red_edge"], zorder=3)
-    ax.text(9.10, 1.98, "accept or abstain", ha="center", va="center", fontsize=9.5, color=COLORS["ink"], zorder=3)
+    ax.text(9.10, 2.36, "Calibrated", ha="center", va="center", fontsize=14.0, fontweight="bold", color=COLORS["red_edge"], zorder=3)
+    ax.text(9.10, 1.98, "accept or abstain", ha="center", va="center", fontsize=11.0, color=COLORS["ink"], zorder=3)
     arrow(ax, (8.10, 3.40), (8.40, 2.78), COLORS["blue_edge"])
     arrow(ax, (8.10, 2.20), (8.40, 2.20), COLORS["green_edge"])
     arrow(ax, (8.10, 1.00), (8.40, 1.62), COLORS["gold_edge"])
-    box(ax, 10.15, 1.65, 1.55, 1.1, "Output", "approved text\n+ evidence IDs", COLORS["input"], COLORS["muted"], 12.5, 9.0, 1.6)
+    box(ax, 10.15, 1.65, 1.55, 1.1, "Output", "approved text\n+ evidence IDs", COLORS["input"], COLORS["muted"], 15.0, 10.5, 1.6)
     arrow(ax, (9.78, 2.2), (10.10, 2.2), COLORS["red_edge"], 2.0)
 
     # The claim boundary is explicit and visually separate from the model path.
     ax.plot([2.05, 8.10], [0.22, 0.22], color=COLORS["muted"], linewidth=1.0, linestyle=(0, (4, 3)), zorder=0)
-    ax.text(5.08, 0.02, "Approved text and evidence IDs cross the realization boundary", ha="center", va="bottom", fontsize=8.8, color=COLORS["muted"])
+    ax.text(5.08, 0.02, "Approved text and evidence IDs cross the realization boundary", ha="center", va="bottom", fontsize=10.0, color=COLORS["muted"])
 
     output.parent.mkdir(parents=True, exist_ok=True)
     fig.savefig(output, format="pdf", dpi=300, bbox_inches="tight", pad_inches=0.08)
@@ -97,5 +97,7 @@ def draw(output: Path):
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
-    parser.add_argument("--output", default="../../paper/figures/planner_mechanism.pdf")
-    draw(Path(parser.parse_args().output).resolve())
+    parser.add_argument("--output", default=None)
+    args = parser.parse_args()
+    output = Path(args.output) if args.output else Path(__file__).resolve().parent / "figures/planner_mechanism.pdf"
+    draw(output.resolve())

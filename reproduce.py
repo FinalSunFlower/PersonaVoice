@@ -48,7 +48,7 @@ def main() -> None:
         for script in ["aggregate_metrics.py", "tradeoff_analysis.py", "failure_analysis.py", "fine_length_analysis.py"]:
             run([sys.executable, script], speech)
     if args.figures:
-        run([sys.executable, "supplement/language_provenance/make_architecture_figure.py", "--output", "paper/figures/planner_mechanism.pdf"])
+        run([sys.executable, "supplement/language_provenance/make_architecture_figure.py", "--output", "supplement/language_provenance/figures/planner_mechanism.pdf"])
         run([sys.executable, "supplement/speech_shortref/make_architecture_figures.py"])
     if args.derive or args.figures:
         # Derived JSON/PDF files are release artifacts too; refresh the manifest
