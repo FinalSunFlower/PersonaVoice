@@ -7,7 +7,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 OUTPUT = ROOT / "reproducibility" / "SHA256SUMS.txt"
-SKIP_DIRS = {".git", ".tmp_render2", "__pycache__", ".pytest_cache"}
+SKIP_DIRS = {".git", ".tmp_render2", "__pycache__", ".pytest_cache", "paper"}
 SKIP_NAMES = {OUTPUT.name}
 
 

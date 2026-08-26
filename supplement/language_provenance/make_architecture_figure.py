@@ -44,50 +44,49 @@ def arrow(ax, start, end, color=COLORS["muted"], lw=1.7, rad=0.0):
 
 def draw(output: Path):
     plt.rcParams.update({"font.family": ["DejaVu Sans", "sans-serif"], "pdf.fonttype": 42, "ps.fonttype": 42})
-    # A compact 12-inch canvas keeps labels large when the figure is placed at
-    # text width in the preprint. Long labels are deliberately wrapped inside
-    # their modules rather than relying on clipping or tiny type.
-    fig = plt.figure(figsize=(12.0, 4.35), facecolor="white")
-    ax = fig.add_axes([0, 0, 1, 1], xlim=(0, 12.0), ylim=(0, 4.35))
+    # Export near the physical width of a two-column figure*.  The 5-inch
+    # height lets every label remain legible after LaTex scales it to textwidth.
+    fig = plt.figure(figsize=(9.3, 5.0), facecolor="white")
+    ax = fig.add_axes([0, 0, 1, 1], xlim=(0, 15.5), ylim=(0, 5.6))
     ax.axis("off")
 
     # Inputs and shared representation.
-    box(ax, 0.20, 2.95, 1.55, 0.95, "Typed\nevidence", "source / time\nstance", COLORS["input"], COLORS["muted"], 16.0, 10.5)
-    box(ax, 0.20, 0.85, 1.55, 0.95, "Candidate", "utterance $y$", COLORS["input"], COLORS["muted"], 16.0, 11.0)
-    box(ax, 2.05, 0.90, 1.90, 2.95, "Shared\nencoder", "frozen MiniLM or\nhashed CPU baseline\n\nseparate $h_E$ and $h_y$", COLORS["blue"], COLORS["blue_edge"], 18.0, 11.0, 2.0)
-    arrow(ax, (1.80, 3.42), (2.00, 3.25))
-    arrow(ax, (1.80, 1.32), (2.00, 1.65))
+    box(ax, 0.30, 3.85, 2.00, 1.20, "Typed\nevidence", "source / time\nstance", COLORS["input"], COLORS["muted"], 16.0, 13.0)
+    box(ax, 0.30, 1.05, 2.00, 1.20, "Candidate", "utterance $y$", COLORS["input"], COLORS["muted"], 15.0, 13.0)
+    box(ax, 2.75, 1.05, 2.35, 4.00, "Shared\nencoder", "frozen MiniLM\nor hashed CPU\nbaseline\n\nseparate $h_E$ and $h_y$", COLORS["blue"], COLORS["blue_edge"], 18.0, 13.0, 2.2)
+    arrow(ax, (2.35, 4.45), (2.68, 4.20))
+    arrow(ax, (2.35, 1.60), (2.68, 2.10))
 
     # Three auditable branches.
-    box(ax, 4.35, 2.95, 1.85, 0.9, "Context\naggregation", "candidate-conditioned\nnot a citation", COLORS["teal"], COLORS["teal_edge"], 15.0, 10.0)
-    box(ax, 4.35, 1.75, 1.85, 0.9, "Evidence\nattribution", "per-item $a_i$\nevidence IDs", COLORS["green"], COLORS["green_edge"], 15.0, 10.0)
-    box(ax, 4.35, 0.55, 1.85, 0.9, "Observable\nstyle", "evidence/candidate\ndifference", COLORS["gold"], COLORS["gold_edge"], 15.0, 10.0)
-    arrow(ax, (4.00, 3.25), (4.30, 3.35), COLORS["blue_edge"])
-    arrow(ax, (4.00, 2.35), (4.30, 2.20), COLORS["blue_edge"])
-    arrow(ax, (4.00, 1.55), (4.30, 1.00), COLORS["blue_edge"])
+    box(ax, 5.75, 3.85, 2.45, 1.20, "Context\naggregation", "candidate-\nconditioned\nnot provenance", COLORS["teal"], COLORS["teal_edge"], 15.0, 12.0)
+    box(ax, 5.75, 2.25, 2.45, 1.20, "Evidence\nattribution", "per-item $a_i$\nevidence IDs", COLORS["green"], COLORS["green_edge"], 15.0, 12.5)
+    box(ax, 5.75, 0.65, 2.45, 1.20, "Observable\nstyle", "evidence /\ncandidate\ndifference", COLORS["gold"], COLORS["gold_edge"], 15.0, 12.0)
+    arrow(ax, (5.15, 4.15), (5.68, 4.40), COLORS["blue_edge"])
+    arrow(ax, (5.15, 3.05), (5.68, 2.85), COLORS["blue_edge"])
+    arrow(ax, (5.15, 1.95), (5.68, 1.25), COLORS["blue_edge"])
 
     # Inspectable gates before the final decision.
-    box(ax, 6.65, 2.95, 1.45, 0.9, "Task heads", "$p_s, p_c, p_y$\nsupport / conflict\nstyle", COLORS["blue"], COLORS["blue_edge"], 13.0, 9.0)
-    box(ax, 6.65, 1.75, 1.45, 0.9, "Citation gate", "$\\max_i a_i \\geq \\theta_e$\nselected IDs", COLORS["green"], COLORS["green_edge"], 12.5, 9.0)
-    box(ax, 6.65, 0.55, 1.45, 0.9, "Style gate", "$p_y$ observable\nnot a trait claim", COLORS["gold"], COLORS["gold_edge"], 12.5, 9.0)
-    arrow(ax, (6.25, 3.40), (6.60, 3.40), COLORS["teal_edge"])
-    arrow(ax, (6.25, 2.20), (6.60, 2.20), COLORS["green_edge"])
-    arrow(ax, (6.25, 1.00), (6.60, 1.00), COLORS["gold_edge"])
+    box(ax, 8.90, 3.85, 2.05, 1.20, "Task\nheads", "$p_s, p_c, p_y$\nsupport /\nconflict / style", COLORS["blue"], COLORS["blue_edge"], 14.0, 11.5)
+    box(ax, 8.90, 2.25, 2.05, 1.20, "Citation gate", "$\\max_i a_i \\geq \\theta_e$\nselected IDs", COLORS["green"], COLORS["green_edge"], 14.0, 11.5)
+    box(ax, 8.90, 0.65, 2.05, 1.20, "Style gate", "$p_y$ observable\nnot a trait claim", COLORS["gold"], COLORS["gold_edge"], 14.0, 11.5)
+    arrow(ax, (8.25, 4.45), (8.83, 4.45), COLORS["teal_edge"])
+    arrow(ax, (8.25, 2.85), (8.83, 2.85), COLORS["green_edge"])
+    arrow(ax, (8.25, 1.25), (8.83, 1.25), COLORS["gold_edge"])
 
     # Decision diamond and approved-text boundary.
-    diamond = Polygon([[8.45, 2.2], [9.10, 2.85], [9.75, 2.2], [9.10, 1.55]], closed=True, facecolor=COLORS["red"], edgecolor=COLORS["red_edge"], linewidth=2.0, zorder=2)
+    diamond = Polygon([[11.15, 2.85], [12.50, 4.05], [13.85, 2.85], [12.50, 1.65]], closed=True, facecolor=COLORS["red"], edgecolor=COLORS["red_edge"], linewidth=2.4, zorder=2)
     ax.add_patch(diamond)
-    ax.text(9.10, 2.36, "Calibrated", ha="center", va="center", fontsize=14.0, fontweight="bold", color=COLORS["red_edge"], zorder=3)
-    ax.text(9.10, 1.98, "accept or abstain", ha="center", va="center", fontsize=11.0, color=COLORS["ink"], zorder=3)
-    arrow(ax, (8.10, 3.40), (8.40, 2.78), COLORS["blue_edge"])
-    arrow(ax, (8.10, 2.20), (8.40, 2.20), COLORS["green_edge"])
-    arrow(ax, (8.10, 1.00), (8.40, 1.62), COLORS["gold_edge"])
-    box(ax, 10.15, 1.65, 1.55, 1.1, "Output", "approved text\n+ evidence IDs", COLORS["input"], COLORS["muted"], 15.0, 10.5, 1.6)
-    arrow(ax, (9.78, 2.2), (10.10, 2.2), COLORS["red_edge"], 2.0)
+    ax.text(12.50, 3.20, "Calibrated\nselection", ha="center", va="center", fontsize=15.0, fontweight="bold", color=COLORS["red_edge"], linespacing=1.0, zorder=3)
+    ax.text(12.50, 2.35, "accept / abstain", ha="center", va="center", fontsize=12.5, color=COLORS["ink"], zorder=3)
+    arrow(ax, (10.95, 4.45), (11.08, 3.99), COLORS["blue_edge"])
+    arrow(ax, (10.95, 2.85), (11.08, 2.85), COLORS["green_edge"])
+    arrow(ax, (10.95, 1.25), (11.08, 1.71), COLORS["gold_edge"])
+    box(ax, 14.10, 1.92, 1.20, 1.86, "Output", "approved\ntext\n+ IDs", COLORS["input"], COLORS["muted"], 13.0, 12.0, 1.8)
+    arrow(ax, (13.88, 2.85), (14.03, 2.85), COLORS["red_edge"], 2.0)
 
     # The claim boundary is explicit and visually separate from the model path.
-    ax.plot([2.05, 8.10], [0.22, 0.22], color=COLORS["muted"], linewidth=1.0, linestyle=(0, (4, 3)), zorder=0)
-    ax.text(5.08, 0.02, "Approved text and evidence IDs cross the realization boundary", ha="center", va="bottom", fontsize=10.0, color=COLORS["muted"])
+    ax.plot([2.75, 10.95], [0.27, 0.27], color=COLORS["muted"], linewidth=1.2, linestyle=(0, (4, 3)), zorder=0)
+    ax.text(6.85, 0.03, "Approved text and evidence IDs cross the realization boundary", ha="center", va="bottom", fontsize=12.0, color=COLORS["muted"])
 
     output.parent.mkdir(parents=True, exist_ok=True)
     fig.savefig(output, format="pdf", dpi=300, bbox_inches="tight", pad_inches=0.08)
