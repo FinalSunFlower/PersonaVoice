@@ -1,0 +1,161 @@
+{
+  "availability_note": "The frozen prediction snapshots contain no genuine planner re-evaluation at budgets 1, 2, or 3. These cells are intentionally absent rather than reconstructed by truncating full-budget predictions.",
+  "budgets": {
+    "10": {
+      "constrained": {
+        "accepted": 4,
+        "accepted_citation_precision": 1.0,
+        "citation_precision": 0.7214199759326113,
+        "citation_recall": 0.762936221419976,
+        "false_acceptance": 0.5,
+        "n": 831,
+        "positive_coverage": 0.020202020202020204
+      },
+      "unconstrained": {
+        "accepted": 86,
+        "accepted_citation_precision": 0.8837209302325582,
+        "citation_precision": 0.7214199759326113,
+        "citation_recall": 0.762936221419976,
+        "false_acceptance": 0.46511627906976744,
+        "n": 831,
+        "positive_coverage": 0.46464646464646464
+      }
+    },
+    "11": {
+      "constrained": {
+        "accepted": 12,
+        "accepted_citation_precision": 1.0,
+        "citation_precision": 0.6922246220302376,
+        "citation_recall": 0.7134629229661628,
+        "false_acceptance": 0.25,
+        "n": 1389,
+        "positive_coverage": 0.031578947368421054
+      },
+      "unconstrained": {
+        "accepted": 231,
+        "accepted_citation_precision": 0.8787878787878788,
+        "citation_precision": 0.6922246220302376,
+        "citation_recall": 0.7134629229661628,
+        "false_acceptance": 0.33766233766233766,
+        "n": 1389,
+        "positive_coverage": 0.5368421052631579
+      }
+    },
+    "12": {
+      "constrained": {
+        "accepted": 0,
+        "accepted_citation_precision": 0.0,
+        "citation_precision": 0.20833333333333334,
+        "citation_recall": 0.25,
+        "false_acceptance": 0.0,
+        "n": 12,
+        "positive_coverage": 0.0
+      },
+      "unconstrained": {
+        "accepted": 0,
+        "accepted_citation_precision": 0.0,
+        "citation_precision": 0.20833333333333334,
+        "citation_recall": 0.25,
+        "false_acceptance": 0.0,
+        "n": 12,
+        "positive_coverage": 0.0
+      }
+    },
+    "14": {
+      "constrained": {
+        "accepted": 0,
+        "accepted_citation_precision": 0.0,
+        "citation_precision": 0.5,
+        "citation_recall": 0.5,
+        "false_acceptance": 0.0,
+        "n": 6,
+        "positive_coverage": 0.0
+      },
+      "unconstrained": {
+        "accepted": 0,
+        "accepted_citation_precision": 0.0,
+        "citation_precision": 0.5,
+        "citation_recall": 0.5,
+        "false_acceptance": 0.0,
+        "n": 6,
+        "positive_coverage": 0.0
+      }
+    },
+    "5": {
+      "constrained": {
+        "accepted": 17,
+        "accepted_citation_precision": 0.9411764705882353,
+        "citation_precision": 0.7302543507362784,
+        "citation_recall": 0.7590361445783133,
+        "false_acceptance": 0.23529411764705882,
+        "n": 2241,
+        "positive_coverage": 0.036414565826330535
+      },
+      "unconstrained": {
+        "accepted": 347,
+        "accepted_citation_precision": 0.8976945244956772,
+        "citation_precision": 0.7302543507362784,
+        "citation_recall": 0.7590361445783133,
+        "false_acceptance": 0.484149855907781,
+        "n": 2241,
+        "positive_coverage": 0.5014005602240896
+      }
+    },
+    "6": {
+      "constrained": {
+        "accepted": 19,
+        "accepted_citation_precision": 0.9210526315789473,
+        "citation_precision": 0.7084967320261438,
+        "citation_recall": 0.7403050108932462,
+        "false_acceptance": 0.3684210526315789,
+        "n": 2295,
+        "positive_coverage": 0.031496062992125984
+      },
+      "unconstrained": {
+        "accepted": 333,
+        "accepted_citation_precision": 0.8858858858858859,
+        "citation_precision": 0.7084967320261438,
+        "citation_recall": 0.7403050108932462,
+        "false_acceptance": 0.45345345345345345,
+        "n": 2295,
+        "positive_coverage": 0.4776902887139108
+      }
+    },
+    "9": {
+      "constrained": {
+        "accepted": 23,
+        "accepted_citation_precision": 0.9347826086956522,
+        "citation_precision": 0.7120395327942498,
+        "citation_recall": 0.7331536388140162,
+        "false_acceptance": 0.13043478260869565,
+        "n": 2226,
+        "positive_coverage": 0.05291005291005291
+      },
+      "unconstrained": {
+        "accepted": 299,
+        "accepted_citation_precision": 0.9080267558528428,
+        "citation_precision": 0.7120395327942498,
+        "citation_recall": 0.7331536388140162,
+        "false_acceptance": 0.39464882943143814,
+        "n": 2226,
+        "positive_coverage": 0.47883597883597884
+      }
+    }
+  },
+  "requested_budgets": [
+    1,
+    2,
+    3,
+    5,
+    10
+  ],
+  "schema_version": "personavoice-language-budget-curve-v1",
+  "status": "measured_replay",
+  "unavailable_requested_budgets": [
+    1,
+    2,
+    3
+  ],
+  "unconstrained_score": "support_probability * style_probability; no citation or conflict gate",
+  "unconstrained_threshold": 0.5
+}

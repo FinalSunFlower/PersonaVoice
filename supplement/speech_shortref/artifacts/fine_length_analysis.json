@@ -1,0 +1,70 @@
+{
+  "bucket_definition": "word count; inclusive 1-3, 4-8, 9-15, and >=16",
+  "buckets": {
+    "1-3": {
+      "catastrophic_count": 13,
+      "cfr_wer_gt_0.5": 0.8125,
+      "cfr_wilson_95": [
+        0.5699064013154177,
+        0.9340852122641324
+      ],
+      "missing_length_count": 0,
+      "n": 16,
+      "secs_mean": 0.4330588770098984,
+      "wer_mean": 0.8333333333333334
+    },
+    "4-8": {
+      "catastrophic_count": 6,
+      "cfr_wer_gt_0.5": 0.16216216216216217,
+      "cfr_wilson_95": [
+        0.07651103235297099,
+        0.31136799295455864
+      ],
+      "missing_length_count": 0,
+      "n": 37,
+      "secs_mean": 0.48187402454582423,
+      "wer_mean": 0.22210424710424712
+    },
+    "9-15": {
+      "catastrophic_count": 1,
+      "cfr_wer_gt_0.5": 0.03571428571428571,
+      "cfr_wilson_95": [
+        0.00633235649754188,
+        0.17712576118498663
+      ],
+      "missing_length_count": 0,
+      "n": 28,
+      "secs_mean": 0.45474898921591894,
+      "wer_mean": 0.13648335791192934
+    },
+    ">15": {
+      "catastrophic_count": 7,
+      "cfr_wer_gt_0.5": 0.058823529411764705,
+      "cfr_wilson_95": [
+        0.02878294603515636,
+        0.11645775418366203
+      ],
+      "missing_length_count": 0,
+      "n": 119,
+      "secs_mean": 0.5160749237201795,
+      "wer_mean": 0.11089226053498125
+    }
+  },
+  "protocol": {
+    "n": 200,
+    "reference_seconds": 1.0,
+    "seed": 42
+  },
+  "schema_version": "personavoice-speech-shortref-fine-length-v1",
+  "source_artifact": "eval_200_samples.json",
+  "status": "measured",
+  "unbucketed": {
+    "catastrophic_count": 0,
+    "cfr_wer_gt_0.5": null,
+    "cfr_wilson_95": null,
+    "missing_length_count": 0,
+    "n": 0,
+    "secs_mean": null,
+    "wer_mean": null
+  }
+}

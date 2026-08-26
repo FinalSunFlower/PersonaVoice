@@ -1,0 +1,108 @@
+{
+  "ablations": {
+    "full_v8": {
+      "n_samples": 200,
+      "secs_mean": 0.37735877685248853,
+      "secs_std": 0.23008808573848546,
+      "wer_mean": 0.20010105738701767,
+      "wer_std": 0.24853478255912095
+    },
+    "wo_ibop": {
+      "n_samples": 200,
+      "secs_mean": 0.37617946511832995,
+      "secs_std": 0.22683424682474146,
+      "wer_mean": 0.19425720010513914,
+      "wer_std": 0.23127875157973965
+    },
+    "wo_sbm": {
+      "n_samples": 200,
+      "secs_mean": 0.37946658066473904,
+      "secs_std": 0.22655179989676424,
+      "wer_mean": 0.19883976222285626,
+      "wer_std": 0.24038398581887596
+    },
+    "wo_td_cfg": {
+      "n_samples": 200,
+      "secs_mean": 0.382478479584679,
+      "secs_std": 0.21992326225835473,
+      "wer_mean": 0.1970744175082262,
+      "wer_std": 0.24596377050841559
+    }
+  },
+  "baselines": {
+    "cosyvoice": {
+      "n_samples": 200,
+      "secs_mean": 0.3594954399880953,
+      "secs_std": 0.15555733927801996,
+      "wer_mean": 0.6130012425588379,
+      "wer_std": 0.3021541136399784
+    },
+    "xtts": {
+      "n_samples": 200,
+      "secs_mean": 0.33485826282761993,
+      "secs_std": 0.10173919265175703,
+      "wer_mean": 0.12962697572508994,
+      "wer_std": 0.2153127670638756
+    }
+  },
+  "length": {
+    "long_text": {
+      "cfr": 0.05442176870748299,
+      "n_samples": 147,
+      "secs_mean": 0.5043937933384156,
+      "wer_mean": 0.11576675527344756
+    },
+    "short_text": {
+      "cfr": 0.3584905660377358,
+      "n_samples": 53,
+      "secs_mean": 0.46713737623309187,
+      "wer_mean": 0.4066262353998203
+    },
+    "ultra_short_text": {
+      "cfr": 0.6363636363636364,
+      "n_samples": 22,
+      "secs_mean": 0.4281719885766506,
+      "wer_mean": 0.6628787878787878
+    }
+  },
+  "personavoice": {
+    "secs": {
+      "ci_95_high": 0.5196251298915533,
+      "ci_95_low": 0.46941655571945634,
+      "max": 0.8217276334762573,
+      "mean": 0.4945208428055048,
+      "median": 0.5225546360015869,
+      "min": -0.03095334768295288,
+      "n": 200,
+      "sem": 0.012730649242376758,
+      "std": 0.18003856816383979
+    },
+    "wer": {
+      "ci_95_high": 0.2357564909352191,
+      "ci_95_low": 0.14993254407865358,
+      "max": 1.0,
+      "mean": 0.19284451750693635,
+      "median": 0.058823529411764705,
+      "min": 0.0,
+      "n": 200,
+      "sem": 0.02176111514902412,
+      "std": 0.30774864176112526
+    }
+  },
+  "protocol": {
+    "cfr": "WER > 0.5",
+    "n": 200,
+    "reference_seconds": 1.0,
+    "seed": 42,
+    "speaker_metric": "ECAPA cosine SECS",
+    "text_metric": "Whisper WER"
+  },
+  "schema_version": "personavoice-speech-shortref-aggregate-v1",
+  "source_artifacts": [
+    "eval_200_statistics.json",
+    "ablation_200_statistics.json",
+    "baseline_external_200.json",
+    "cfr_analysis.json",
+    "honest_metrics_v10.4.7.json"
+  ]
+}

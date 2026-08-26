@@ -1,0 +1,14 @@
+{
+  "headline": {
+    "cfr_percent": 13.5,
+    "secs": 0.4945208428055048,
+    "wer": 0.19284451750693635
+  },
+  "interpretation": "The one-second condition preserves objective speaker similarity while short text sharply worsens recognition. SECS and WER must be reported jointly; neither is a sufficient quality guarantee.",
+  "length_delta_short_minus_long": {
+    "cfr": 30.40687973302528,
+    "secs": -0.037256417105323736,
+    "wer": 0.29085948012637275
+  },
+  "schema_version": "personavoice-speech-tradeoff-v1"
+}

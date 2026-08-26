@@ -1,0 +1,44 @@
+{
+  "ablation_factors": {
+    "FiLM": [
+      "off (reported release default)",
+      "on (control path only)"
+    ],
+    "LAAG": [
+      "on",
+      "off"
+    ],
+    "OES": [
+      "on",
+      "off"
+    ]
+  },
+  "claim_boundary": "No duration curve or LAAG/OES causal effect is reported until condition-level audio and metric snapshots are released.",
+  "controls": [
+    "same 200-item ID list where supported",
+    "same evaluator revisions and transcript normalization",
+    "frozen checkpoint and decoder configuration per condition",
+    "no test-set model selection"
+  ],
+  "length_buckets_words": [
+    "1-3",
+    "4-8",
+    "9-15",
+    ">15"
+  ],
+  "metrics": [
+    "SECS",
+    "WER",
+    "CFR (WER > 0.5)"
+  ],
+  "public_data": "LibriTTS dev-clean official split; optional VCTK test-clean validation",
+  "reference_duration_seconds": [
+    0.5,
+    1.0,
+    2.0,
+    3.0
+  ],
+  "schema_version": "personavoice-speech-shortref-extension-v1",
+  "seed": 42,
+  "status": "protocol_registered_pending_execution"
+}
