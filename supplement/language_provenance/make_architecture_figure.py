@@ -47,7 +47,7 @@ def draw(output: Path):
     # Export near the physical width of a two-column figure*.  The 5-inch
     # height lets every label remain legible after LaTex scales it to textwidth.
     fig = plt.figure(figsize=(9.3, 5.0), facecolor="white")
-    ax = fig.add_axes([0, 0, 1, 1], xlim=(0, 15.5), ylim=(0, 5.6))
+    ax = fig.add_axes([0, 0, 1, 1], xlim=(0, 16.4), ylim=(0, 5.6))
     ax.axis("off")
 
     # Inputs and shared representation.
@@ -67,22 +67,22 @@ def draw(output: Path):
 
     # Inspectable gates before the final decision.
     box(ax, 8.90, 3.85, 2.05, 1.20, "Task\nheads", "$p_s, p_c, p_y$\nsupport /\nconflict / style", COLORS["blue"], COLORS["blue_edge"], 14.0, 11.5)
-    box(ax, 8.90, 2.25, 2.05, 1.20, "Citation gate", "$\\max_i a_i \\geq \\theta_e$\nselected IDs", COLORS["green"], COLORS["green_edge"], 14.0, 11.5)
+    box(ax, 8.90, 2.25, 2.05, 1.20, "Citation\nthreshold", "$\\max_i a_i$\n$\\geq \\theta_e$\nselected IDs", COLORS["green"], COLORS["green_edge"], 13.5, 10.5)
     box(ax, 8.90, 0.65, 2.05, 1.20, "Style gate", "$p_y$ observable\nnot a trait claim", COLORS["gold"], COLORS["gold_edge"], 14.0, 11.5)
     arrow(ax, (8.25, 4.45), (8.83, 4.45), COLORS["teal_edge"])
     arrow(ax, (8.25, 2.85), (8.83, 2.85), COLORS["green_edge"])
     arrow(ax, (8.25, 1.25), (8.83, 1.25), COLORS["gold_edge"])
 
     # Decision diamond and approved-text boundary.
-    diamond = Polygon([[11.15, 2.85], [12.50, 4.05], [13.85, 2.85], [12.50, 1.65]], closed=True, facecolor=COLORS["red"], edgecolor=COLORS["red_edge"], linewidth=2.4, zorder=2)
+    diamond = Polygon([[10.95, 2.85], [12.65, 4.25], [14.35, 2.85], [12.65, 1.45]], closed=True, facecolor=COLORS["red"], edgecolor=COLORS["red_edge"], linewidth=2.4, zorder=2)
     ax.add_patch(diamond)
-    ax.text(12.50, 3.20, "Calibrated\nselection", ha="center", va="center", fontsize=15.0, fontweight="bold", color=COLORS["red_edge"], linespacing=1.0, zorder=3)
-    ax.text(12.50, 2.35, "accept / abstain", ha="center", va="center", fontsize=12.5, color=COLORS["ink"], zorder=3)
-    arrow(ax, (10.95, 4.45), (11.08, 3.99), COLORS["blue_edge"])
-    arrow(ax, (10.95, 2.85), (11.08, 2.85), COLORS["green_edge"])
-    arrow(ax, (10.95, 1.25), (11.08, 1.71), COLORS["gold_edge"])
-    box(ax, 14.10, 1.92, 1.20, 1.86, "Output", "approved\ntext\n+ IDs", COLORS["input"], COLORS["muted"], 13.0, 12.0, 1.8)
-    arrow(ax, (13.88, 2.85), (14.03, 2.85), COLORS["red_edge"], 2.0)
+    ax.text(12.65, 3.35, "Calibrated\nselection", ha="center", va="center", fontsize=13.0, fontweight="bold", color=COLORS["red_edge"], linespacing=1.0, zorder=3)
+    ax.text(12.65, 2.40, "accept / abstain", ha="center", va="center", fontsize=12.0, color=COLORS["ink"], zorder=3)
+    arrow(ax, (10.95, 4.45), (11.08, 4.05), COLORS["blue_edge"])
+    arrow(ax, (10.95, 2.85), (10.98, 2.85), COLORS["green_edge"])
+    arrow(ax, (10.95, 1.25), (11.08, 1.65), COLORS["gold_edge"])
+    box(ax, 14.70, 1.92, 1.30, 1.86, "Output", "approved\ntext\n+ IDs", COLORS["input"], COLORS["muted"], 13.0, 10.5, 1.8)
+    arrow(ax, (14.38, 2.85), (14.63, 2.85), COLORS["red_edge"], 2.0)
 
     # The claim boundary is explicit and visually separate from the model path.
     ax.plot([2.75, 10.95], [0.27, 0.27], color=COLORS["muted"], linewidth=1.2, linestyle=(0, (4, 3)), zorder=0)
