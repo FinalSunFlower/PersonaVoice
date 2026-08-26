@@ -53,7 +53,7 @@ def draw(output: Path):
     # Inputs and shared representation.
     box(ax, 0.30, 3.85, 2.00, 1.20, "Typed\nevidence", "source / time\nstance", COLORS["input"], COLORS["muted"], 16.0, 13.0)
     box(ax, 0.30, 1.05, 2.00, 1.20, "Candidate", "utterance $y$", COLORS["input"], COLORS["muted"], 15.0, 13.0)
-    box(ax, 2.75, 1.05, 2.35, 4.00, "Shared\nencoder", "frozen MiniLM\nor hashed CPU\nbaseline\n\nseparate $h_E$ and $h_y$", COLORS["blue"], COLORS["blue_edge"], 18.0, 13.0, 2.2)
+    box(ax, 2.75, 1.05, 2.35, 4.00, "Shared\nencoder", "frozen MiniLM\nor hashed CPU\nbaseline\n\nseparate:\n$h_E$ (evidence)\n$h_y$ (candidate)", COLORS["blue"], COLORS["blue_edge"], 18.0, 11.0, 2.2)
     arrow(ax, (2.35, 4.45), (2.68, 4.20))
     arrow(ax, (2.35, 1.60), (2.68, 2.10))
 
@@ -66,9 +66,9 @@ def draw(output: Path):
     arrow(ax, (5.15, 1.95), (5.68, 1.25), COLORS["blue_edge"])
 
     # Inspectable gates before the final decision.
-    box(ax, 8.90, 3.85, 2.05, 1.20, "Task\nheads", "$p_s, p_c, p_y$\nsupport /\nconflict / style", COLORS["blue"], COLORS["blue_edge"], 14.0, 11.5)
+    box(ax, 8.90, 3.85, 2.05, 1.20, "Task\nheads", "$p_s, p_c, p_y$\nsupport /\nconflict /\nstyle", COLORS["blue"], COLORS["blue_edge"], 14.0, 10.5)
     box(ax, 8.90, 2.25, 2.05, 1.20, "Citation\nthreshold", "$\\max_i a_i$\n$\\geq \\theta_e$\nselected IDs", COLORS["green"], COLORS["green_edge"], 13.5, 10.5)
-    box(ax, 8.90, 0.65, 2.05, 1.20, "Style gate", "$p_y$ observable\nnot a trait claim", COLORS["gold"], COLORS["gold_edge"], 14.0, 11.5)
+    box(ax, 8.90, 0.65, 2.05, 1.20, "Style gate", "$p_y$ observable\nnot a trait\nclaim", COLORS["gold"], COLORS["gold_edge"], 14.0, 10.5)
     arrow(ax, (8.25, 4.45), (8.83, 4.45), COLORS["teal_edge"])
     arrow(ax, (8.25, 2.85), (8.83, 2.85), COLORS["green_edge"])
     arrow(ax, (8.25, 1.25), (8.83, 1.25), COLORS["gold_edge"])
@@ -77,7 +77,7 @@ def draw(output: Path):
     diamond = Polygon([[10.95, 2.85], [12.65, 4.25], [14.35, 2.85], [12.65, 1.45]], closed=True, facecolor=COLORS["red"], edgecolor=COLORS["red_edge"], linewidth=2.4, zorder=2)
     ax.add_patch(diamond)
     ax.text(12.65, 3.35, "Calibrated\nselection", ha="center", va="center", fontsize=13.0, fontweight="bold", color=COLORS["red_edge"], linespacing=1.0, zorder=3)
-    ax.text(12.65, 2.40, "accept / abstain", ha="center", va="center", fontsize=12.0, color=COLORS["ink"], zorder=3)
+    ax.text(12.65, 2.40, "accept /\nabstain", ha="center", va="center", fontsize=12.0, color=COLORS["ink"], linespacing=1.0, zorder=3)
     arrow(ax, (10.95, 4.45), (11.08, 4.05), COLORS["blue_edge"])
     arrow(ax, (10.95, 2.85), (10.98, 2.85), COLORS["green_edge"])
     arrow(ax, (10.95, 1.25), (11.08, 1.65), COLORS["gold_edge"])
