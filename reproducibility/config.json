@@ -1,0 +1,44 @@
+{
+  "release_id": "paper-supplement-v1.0",
+  "release_date": "2026-08-26",
+  "repository": "https://github.com/FinalSunFlower/PersonaVoice",
+  "branch": "paper-supplement-v1.0",
+  "papers": {
+    "language": {
+      "title": "Provenance-Constrained Selective Language Style Planning from Sparse Evidence",
+      "version_tag": "paper-language-v1.0",
+      "paper_distribution": "separate Zenodo deposition (not duplicated in this support branch)",
+      "frozen_prediction_files": [
+        "supplement/language_provenance/artifacts/snli_semantic_mlp_seed0.json",
+        "supplement/language_provenance/artifacts/snli_semantic_mlp_seed1.json",
+        "supplement/language_provenance/artifacts/snli_semantic_mlp_seed2.json"
+      ],
+      "seeds": [0, 1, 2],
+      "encoder": "sentence-transformers/all-MiniLM-L6-v2 (frozen)",
+      "projection_dim": 128,
+      "max_tokens": 96,
+      "optimizer": "AdamW",
+      "gradient_clip_norm": 1.0,
+      "observed_evidence_budgets": [5, 6, 7, 8, 9, 10, 11],
+      "unavailable_requested_budgets": [1, 2, 3]
+    },
+    "speech": {
+      "title": "PersonaVoice: One-Second Voice Cloning with Length-Adaptive Flow Matching",
+      "version_tag": "paper-speech-v1.0",
+      "paper_distribution": "separate Zenodo deposition (not duplicated in this support branch)",
+      "frozen_prediction_files": [
+        "supplement/speech_shortref/artifacts/eval_200_samples.json"
+      ],
+      "seed": 42,
+      "n_items": 200,
+      "reference_seconds": 1.0,
+      "speaker_metric": "ECAPA-TDNN cosine speaker similarity (SECS)",
+      "text_metric": "Whisper WER",
+      "catastrophic_failure_rule": "WER > 0.5",
+      "dataset": "LibriTTS dev-clean official split",
+      "pending_conditions_manifest": "supplement/speech_shortref/artifacts/extension_manifest.json"
+    }
+  },
+  "weights_policy": "Large checkpoints and private/raw audio are intentionally excluded; obtain upstream model weights under their original licenses.",
+  "manifest": "reproducibility/SHA256SUMS.txt"
+}

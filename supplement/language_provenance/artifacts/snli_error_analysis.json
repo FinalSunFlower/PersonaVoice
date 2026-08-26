@@ -1,0 +1,147 @@
+{
+  "by_evidence_budget": {
+    "10": {
+      "false_abstention:attribution_underconfidence": 2,
+      "false_abstention:selection_threshold": 95,
+      "false_acceptance:missing_support": 1,
+      "false_acceptance:selection_calibration": 1
+    },
+    "11": {
+      "false_abstention:attribution_underconfidence": 25,
+      "false_abstention:selection_threshold": 251,
+      "false_acceptance:selection_calibration": 3
+    },
+    "5": {
+      "false_abstention:attribution_underconfidence": 18,
+      "false_abstention:selection_threshold": 326,
+      "false_acceptance:missing_support": 1,
+      "false_acceptance:selection_calibration": 3
+    },
+    "6": {
+      "false_abstention:attribution_underconfidence": 9,
+      "false_abstention:selection_threshold": 360,
+      "false_acceptance:selection_calibration": 7
+    },
+    "9": {
+      "false_abstention:attribution_underconfidence": 33,
+      "false_abstention:selection_threshold": 325,
+      "false_acceptance:selection_calibration": 3
+    }
+  },
+  "evaluation_count": 3,
+  "evaluation_data_fingerprint": "sha256:0b6094089901215bf51c37e8c38ec81617fe96bbf5c512363f94b1d84827effe",
+  "examples": {
+    "false_abstention:attribution_underconfidence": [
+      {
+        "episode_id": "snli-compositional:test:546:positive",
+        "evidence_budget": 11,
+        "speaker_id": "snli:test:546"
+      },
+      {
+        "episode_id": "snli-compositional:test:598:positive",
+        "evidence_budget": 9,
+        "speaker_id": "snli:test:598"
+      },
+      {
+        "episode_id": "snli-compositional:test:673:positive",
+        "evidence_budget": 6,
+        "speaker_id": "snli:test:673"
+      },
+      {
+        "episode_id": "snli-compositional:test:1245:positive",
+        "evidence_budget": 9,
+        "speaker_id": "snli:test:1245"
+      },
+      {
+        "episode_id": "snli-compositional:test:1322:positive",
+        "evidence_budget": 9,
+        "speaker_id": "snli:test:1322"
+      }
+    ],
+    "false_abstention:selection_threshold": [
+      {
+        "episode_id": "snli-compositional:test:6:positive",
+        "evidence_budget": 5,
+        "speaker_id": "snli:test:6"
+      },
+      {
+        "episode_id": "snli-compositional:test:13:positive",
+        "evidence_budget": 6,
+        "speaker_id": "snli:test:13"
+      },
+      {
+        "episode_id": "snli-compositional:test:26:positive",
+        "evidence_budget": 9,
+        "speaker_id": "snli:test:26"
+      },
+      {
+        "episode_id": "snli-compositional:test:32:positive",
+        "evidence_budget": 5,
+        "speaker_id": "snli:test:32"
+      },
+      {
+        "episode_id": "snli-compositional:test:48:positive",
+        "evidence_budget": 6,
+        "speaker_id": "snli:test:48"
+      }
+    ],
+    "false_acceptance:missing_support": [
+      {
+        "episode_id": "snli-compositional:test:6260:positive",
+        "evidence_budget": 10,
+        "speaker_id": "snli:test:6260"
+      },
+      {
+        "episode_id": "snli-compositional:test:9399:positive",
+        "evidence_budget": 5,
+        "speaker_id": "snli:test:9399"
+      }
+    ],
+    "false_acceptance:selection_calibration": [
+      {
+        "episode_id": "snli-compositional:test:6:negative",
+        "evidence_budget": 5,
+        "speaker_id": "snli:test:6"
+      },
+      {
+        "episode_id": "snli-compositional:test:48:negative",
+        "evidence_budget": 6,
+        "speaker_id": "snli:test:48"
+      },
+      {
+        "episode_id": "snli-compositional:test:856:negative",
+        "evidence_budget": 5,
+        "speaker_id": "snli:test:856"
+      },
+      {
+        "episode_id": "snli-compositional:test:1009:negative",
+        "evidence_budget": 11,
+        "speaker_id": "snli:test:1009"
+      },
+      {
+        "episode_id": "snli-compositional:test:1195:negative",
+        "evidence_budget": 11,
+        "speaker_id": "snli:test:1195"
+      }
+    ]
+  },
+  "schema_version": "personavoice-tacl-error-analysis-v1",
+  "source_files": [
+    "results/snli_semantic_mlp_seed0.json",
+    "results/snli_semantic_mlp_seed1.json",
+    "results/snli_semantic_mlp_seed2.json"
+  ],
+  "status": "measured_error_analysis",
+  "tag_counts": {
+    "false_abstention:attribution_underconfidence": 87,
+    "false_abstention:selection_threshold": 1357,
+    "false_acceptance:missing_support": 2,
+    "false_acceptance:selection_calibration": 17
+  },
+  "tag_rates": {
+    "false_abstention:attribution_underconfidence": 0.059466848940533154,
+    "false_abstention:selection_threshold": 0.9275461380724539,
+    "false_acceptance:missing_support": 0.001367053998632946,
+    "false_acceptance:selection_calibration": 0.01161995898838004
+  }
+}

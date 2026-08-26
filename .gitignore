@@ -1,99 +1,58 @@
-# ============================================================
-# PersonaVoice .gitignore (v10.4.8)
-# ============================================================
-
-# ── Python ──
 __pycache__/
 *.py[cod]
-*$py.class
-*.so
-.Python
 *.egg-info/
 .eggs/
 build/
 dist/
-.eggs/
 
-# ── Virtual Environments ──
+# Local environments and tools
 .venv/
 venv/
-env/
-ENV/
-ENV/
-
-# ── IDE / Editor ──
 .idea/
 .vscode/
-*.swp
-*.swo
-*~
-*.sublime-workspace
-*.sublime-project
+.pytest_cache/
+test-results/
+.coverage
+htmlcov/
 
-# ── OS ──
-.DS_Store
-Thumbs.db
-desktop.ini
-ehthumbs.db
-
-# ── Large Data Files (NOT for GitHub — download via scripts/download_models.py) ──
-data/LibriTTS/
-data/dev-clean.tar.gz
-data/dpo_preference_pairs.pt
-data/libritts_processed/
-data/*.pt
-data/*.tar.gz
-data/*.zip
-
-# ── Model Checkpoints (too large for GitHub — train locally) ──
+# Licensed datasets and model artifacts are downloaded separately.
+data/
 checkpoints/
+pretrained_models/
+models/
 *.pt
 *.pth
 *.ckpt
 *.bin
 *.safetensors
 
-# ── Pretrained Models (download via scripts/download_models.py) ──
-pretrained_models/
-models/
-models/**
-
-# ── Experiment Temp Files ──
+# Generated run artifacts
 tmp/
 tmp_*/
+.tmp_render2/
 *.tmp
 *.log
 logs/
-
-# ── Generated Audio Outputs (regenerable) ──
 outputs/
-outputs/**
-
-# ── Results: keep JSON + figures, ignore large audio samples ──
-results/subjective_eval_samples/
-results/pdfm_audio/
 results/*.wav
 results/*.mp3
 results/*.flac
+results/subjective_eval_samples/
 
-# ── Jupyter ──
-.ipynb_checkpoints/
-*.ipynb
+# LaTeX build intermediates (keep source PDFs and publication figures)
+*.aux
+*.bbl
+*.blg
+*.fdb_latexmk
+*.fls
+*.out
+*.synctex.gz
 
-# ── Local Demo Audio (regenerable from 1111.mp3) ──
-# Keep 1111.mp3 / 1111.wav as bundled demo reference
-
-# ── Cache / HuggingFace cache (regenerable) ──
+# Local caches and OS files
 .cache/
 .huggingface/
 *.cache
-
-# ── Coverage / Test Reports ──
-.coverage
-htmlcov/
-.pytest_cache/
-.tox/
-
-# ── Lock files (keep requirements.txt as source of truth) ──
-# poetry.lock
-# Pipfile.lock
+.DS_Store
+._*
+Thumbs.db
+desktop.ini

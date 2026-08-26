@@ -1,0 +1,37 @@
+{
+  "title": "PersonaVoice research preprints and reproducible extensions",
+  "upload_type": "publication",
+  "publication_type": "preprint",
+  "publication_date": "2026-08-25",
+  "version": "1.0.0",
+  "description": "Two independent preprints by Jiang Luchang: provenance-constrained selective language planning and measured one-second speech generation, with standalone public analysis supplements.",
+  "creators": [
+    {
+      "name": "Jiang Luchang",
+      "orcid": "0009-0004-4579-4243",
+      "email": "auroral.sunflower@gmail.com"
+    }
+  ],
+  "keywords": [
+    "provenance-constrained generation",
+    "selective prediction",
+    "citation attribution",
+    "language style",
+    "one-second voice cloning",
+    "speech synthesis",
+    "abstention"
+  ],
+  "license": "MIT",
+  "related_identifiers": [
+    {
+      "identifier": "https://github.com/FinalSunFlower/PersonaVoice",
+      "relation": "isSupplementTo",
+      "resource_type": "software"
+    },
+    {
+      "identifier": "https://orcid.org/0009-0004-4579-4243",
+      "relation": "isIdenticalTo",
+      "resource_type": "person"
+    }
+  ]
+}

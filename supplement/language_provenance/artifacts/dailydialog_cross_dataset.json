@@ -1,0 +1,38 @@
+{
+  "budgets": {
+    "1": {
+      "n_supported_episodes": 276,
+      "support_coverage_over_eligible": 0.2881002087682672,
+      "top1_citation_precision": 1.0,
+      "top1_citation_recall": 1.0
+    },
+    "2": {
+      "n_supported_episodes": 418,
+      "support_coverage_over_eligible": 0.4363256784968685,
+      "top1_citation_precision": 0.8732057416267942,
+      "top1_citation_recall": 1.0
+    },
+    "3": {
+      "n_supported_episodes": 468,
+      "support_coverage_over_eligible": 0.48851774530271397,
+      "top1_citation_precision": 0.8002136752136753,
+      "top1_citation_recall": 1.0
+    },
+    "5": {
+      "n_supported_episodes": 534,
+      "support_coverage_over_eligible": 0.55741127348643,
+      "top1_citation_precision": 0.7083645443196005,
+      "top1_citation_recall": 1.0
+    }
+  },
+  "claim_boundary": "This is not a planner rerun, entailment annotation, or natural-person authorization result; it is a deterministic cross-domain input-structure audit.",
+  "dataset": "DailyDialog official test archive",
+  "episodes_considered": 958,
+  "label_definition": "lexical evidence = prior turn sharing at least one non-stopword with the target",
+  "schema_version": "personavoice-language-dailydialog-audit-v1",
+  "source_sha256": "cfffc0bab93a3697c2562a9ee35c4533f0de2a93e86a4e4d3ea45cbde4bea00f",
+  "source_url": "https://huggingface.co/datasets/roskoN/dailydialog/resolve/main/test.zip",
+  "split": "test",
+  "status": "measured_auxiliary_audit",
+  "target_turn": "sixth turn when available; otherwise final turn"
+}

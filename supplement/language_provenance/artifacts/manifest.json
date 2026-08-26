@@ -1,0 +1,31 @@
+{
+  "citation_semantics": "the annotated SNLI premise is the provenance source for all three NLI labels",
+  "counts": {
+    "test": 3000,
+    "train": 12000,
+    "validation": 3000
+  },
+  "distractors_per_example": 3,
+  "fingerprint": "sha256:2a97e9948608eb12ce6f33ca312c020611efaca7ab8bfd785d91cd6ecf7d0bd5",
+  "gold_position": "source-index modulo evidence count",
+  "label_mapping": {
+    "0": "entailment",
+    "1": "neutral",
+    "2": "contradiction"
+  },
+  "living_speaker_authorization": false,
+  "natural_generation_claim": false,
+  "sampling": "fixed-seed label-balanced rows; official splits preserved",
+  "schema_version": "personavoice-snli-compositional-v1",
+  "source_file_sha256": {
+    "test": "4696deda851c4d2385f26b58f2e13f9ed9f08ea7b42a3f4c2b97a9d08448878c",
+    "train": "ef9a7b25d97390a62aeda7abe26aec8640600f50b818eaeb9107097d60ac6620",
+    "validation": "00f5ed8deaed007fef3022f0215b287efbab815b1bb31ac3f3ff4f4129d41ffe"
+  },
+  "source_uri": "https://huggingface.co/datasets/stanfordnlp/snli",
+  "sources": {
+    "factual": "SNLI 1.0 human NLI labels (CC BY-SA 4.0)",
+    "style": "PersonaChat role-instance evidence (CC BY 4.0)",
+    "auxiliary_cross_dataset": "DailyDialog official test archive (CC BY-NC-SA 4.0; lexical audit only)"
+  }
+}

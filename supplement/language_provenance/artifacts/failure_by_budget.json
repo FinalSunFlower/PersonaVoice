@@ -1,0 +1,85 @@
+{
+  "budgets": {
+    "10": {
+      "counts": {
+        "false_abstention:attribution_underconfidence": 2,
+        "false_abstention:selection_threshold": 95,
+        "false_acceptance:missing_support": 1,
+        "false_acceptance:selection_calibration": 1
+      },
+      "false_abstention_attribution_rate": 0.0024067388688327317,
+      "false_abstention_selection_rate": 0.11432009626955475,
+      "false_acceptance_missing_support_rate": 0.0012033694344163659,
+      "false_acceptance_selection_calibration_rate": 0.0012033694344163659,
+      "n": 831
+    },
+    "11": {
+      "counts": {
+        "false_abstention:attribution_underconfidence": 25,
+        "false_abstention:selection_threshold": 251,
+        "false_acceptance:selection_calibration": 3
+      },
+      "false_abstention_attribution_rate": 0.017998560115190784,
+      "false_abstention_selection_rate": 0.18070554355651547,
+      "false_acceptance_missing_support_rate": 0.0,
+      "false_acceptance_selection_calibration_rate": 0.0021598272138228943,
+      "n": 1389
+    },
+    "12": {
+      "counts": {},
+      "false_abstention_attribution_rate": 0.0,
+      "false_abstention_selection_rate": 0.0,
+      "false_acceptance_missing_support_rate": 0.0,
+      "false_acceptance_selection_calibration_rate": 0.0,
+      "n": 12
+    },
+    "14": {
+      "counts": {},
+      "false_abstention_attribution_rate": 0.0,
+      "false_abstention_selection_rate": 0.0,
+      "false_acceptance_missing_support_rate": 0.0,
+      "false_acceptance_selection_calibration_rate": 0.0,
+      "n": 6
+    },
+    "5": {
+      "counts": {
+        "false_abstention:attribution_underconfidence": 18,
+        "false_abstention:selection_threshold": 326,
+        "false_acceptance:missing_support": 1,
+        "false_acceptance:selection_calibration": 3
+      },
+      "false_abstention_attribution_rate": 0.008032128514056224,
+      "false_abstention_selection_rate": 0.14547077197679606,
+      "false_acceptance_missing_support_rate": 0.0004462293618920125,
+      "false_acceptance_selection_calibration_rate": 0.0013386880856760374,
+      "n": 2241
+    },
+    "6": {
+      "counts": {
+        "false_abstention:attribution_underconfidence": 9,
+        "false_abstention:selection_threshold": 360,
+        "false_acceptance:selection_calibration": 7
+      },
+      "false_abstention_attribution_rate": 0.00392156862745098,
+      "false_abstention_selection_rate": 0.1568627450980392,
+      "false_acceptance_missing_support_rate": 0.0,
+      "false_acceptance_selection_calibration_rate": 0.0030501089324618735,
+      "n": 2295
+    },
+    "9": {
+      "counts": {
+        "false_abstention:attribution_underconfidence": 33,
+        "false_abstention:selection_threshold": 325,
+        "false_acceptance:selection_calibration": 3
+      },
+      "false_abstention_attribution_rate": 0.014824797843665768,
+      "false_abstention_selection_rate": 0.14600179694519316,
+      "false_acceptance_missing_support_rate": 0.0,
+      "false_acceptance_selection_calibration_rate": 0.0013477088948787063,
+      "n": 2226
+    }
+  },
+  "interpretation": "Rates use pooled frozen rows from three registered seeds; cells are the observed budgets only.",
+  "schema_version": "personavoice-language-failure-by-budget-v1",
+  "status": "measured_replay"
+}

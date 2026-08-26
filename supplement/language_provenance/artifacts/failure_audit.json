@@ -1,0 +1,354 @@
+{
+  "by_evidence_budget": {
+    "10": {
+      "false_abstention:attribution_underconfidence": 2,
+      "false_abstention:selection_threshold": 95,
+      "false_acceptance:missing_support": 1,
+      "false_acceptance:selection_calibration": 1
+    },
+    "11": {
+      "false_abstention:attribution_underconfidence": 25,
+      "false_abstention:selection_threshold": 251,
+      "false_acceptance:selection_calibration": 3
+    },
+    "5": {
+      "false_abstention:attribution_underconfidence": 18,
+      "false_abstention:selection_threshold": 326,
+      "false_acceptance:missing_support": 1,
+      "false_acceptance:selection_calibration": 3
+    },
+    "6": {
+      "false_abstention:attribution_underconfidence": 9,
+      "false_abstention:selection_threshold": 360,
+      "false_acceptance:selection_calibration": 7
+    },
+    "9": {
+      "false_abstention:attribution_underconfidence": 33,
+      "false_abstention:selection_threshold": 325,
+      "false_acceptance:selection_calibration": 3
+    }
+  },
+  "by_selected_source_type": {
+    "factual_relation": {
+      "false_abstention:selection_threshold": 1357,
+      "false_acceptance:missing_support": 2,
+      "false_acceptance:style_overfit": 17
+    },
+    "none_selected": {
+      "false_abstention:attribution_underconfidence": 11,
+      "false_abstention:selection_threshold": 76
+    }
+  },
+  "counts": {
+    "false_abstention:attribution_underconfidence": 87,
+    "false_abstention:selection_threshold": 1357,
+    "false_acceptance:missing_support": 2,
+    "false_acceptance:selection_calibration": 17
+  },
+  "derived_false_acceptance": {
+    "false_acceptance:missing_support": 2,
+    "false_acceptance:style_overfit": 17
+  },
+  "evaluation_rows": 9000,
+  "examples": {
+    "false_abstention:attribution_underconfidence": [
+      {
+        "episode_id": "snli-compositional:test:598:positive",
+        "evidence_budget": 9,
+        "seed_file": "snli_semantic_mlp_seed0.json",
+        "selected_source_types": []
+      },
+      {
+        "episode_id": "snli-compositional:test:3650:positive",
+        "evidence_budget": 11,
+        "seed_file": "snli_semantic_mlp_seed0.json",
+        "selected_source_types": []
+      },
+      {
+        "episode_id": "snli-compositional:test:3041:positive",
+        "evidence_budget": 5,
+        "seed_file": "snli_semantic_mlp_seed1.json",
+        "selected_source_types": []
+      },
+      {
+        "episode_id": "snli-compositional:test:3650:positive",
+        "evidence_budget": 11,
+        "seed_file": "snli_semantic_mlp_seed1.json",
+        "selected_source_types": []
+      },
+      {
+        "episode_id": "snli-compositional:test:4240:positive",
+        "evidence_budget": 9,
+        "seed_file": "snli_semantic_mlp_seed1.json",
+        "selected_source_types": []
+      },
+      {
+        "episode_id": "snli-compositional:test:4824:positive",
+        "evidence_budget": 6,
+        "seed_file": "snli_semantic_mlp_seed1.json",
+        "selected_source_types": []
+      },
+      {
+        "episode_id": "snli-compositional:test:3650:positive",
+        "evidence_budget": 11,
+        "seed_file": "snli_semantic_mlp_seed2.json",
+        "selected_source_types": []
+      },
+      {
+        "episode_id": "snli-compositional:test:4240:positive",
+        "evidence_budget": 9,
+        "seed_file": "snli_semantic_mlp_seed2.json",
+        "selected_source_types": []
+      },
+      {
+        "episode_id": "snli-compositional:test:5433:positive",
+        "evidence_budget": 9,
+        "seed_file": "snli_semantic_mlp_seed2.json",
+        "selected_source_types": []
+      },
+      {
+        "episode_id": "snli-compositional:test:7265:positive",
+        "evidence_budget": 11,
+        "seed_file": "snli_semantic_mlp_seed2.json",
+        "selected_source_types": []
+      },
+      {
+        "episode_id": "snli-compositional:test:8681:positive",
+        "evidence_budget": 5,
+        "seed_file": "snli_semantic_mlp_seed2.json",
+        "selected_source_types": []
+      }
+    ],
+    "false_abstention:selection_threshold": [
+      {
+        "episode_id": "snli-compositional:test:6:positive",
+        "evidence_budget": 5,
+        "seed_file": "snli_semantic_mlp_seed0.json",
+        "selected_source_types": [
+          "factual_relation"
+        ]
+      },
+      {
+        "episode_id": "snli-compositional:test:13:positive",
+        "evidence_budget": 6,
+        "seed_file": "snli_semantic_mlp_seed0.json",
+        "selected_source_types": [
+          "factual_relation"
+        ]
+      },
+      {
+        "episode_id": "snli-compositional:test:26:positive",
+        "evidence_budget": 9,
+        "seed_file": "snli_semantic_mlp_seed0.json",
+        "selected_source_types": [
+          "factual_relation"
+        ]
+      },
+      {
+        "episode_id": "snli-compositional:test:32:positive",
+        "evidence_budget": 5,
+        "seed_file": "snli_semantic_mlp_seed0.json",
+        "selected_source_types": [
+          "factual_relation"
+        ]
+      },
+      {
+        "episode_id": "snli-compositional:test:48:positive",
+        "evidence_budget": 6,
+        "seed_file": "snli_semantic_mlp_seed0.json",
+        "selected_source_types": [
+          "factual_relation"
+        ]
+      },
+      {
+        "episode_id": "snli-compositional:test:56:positive",
+        "evidence_budget": 11,
+        "seed_file": "snli_semantic_mlp_seed0.json",
+        "selected_source_types": [
+          "factual_relation"
+        ]
+      },
+      {
+        "episode_id": "snli-compositional:test:76:positive",
+        "evidence_budget": 9,
+        "seed_file": "snli_semantic_mlp_seed0.json",
+        "selected_source_types": [
+          "factual_relation"
+        ]
+      },
+      {
+        "episode_id": "snli-compositional:test:89:positive",
+        "evidence_budget": 5,
+        "seed_file": "snli_semantic_mlp_seed0.json",
+        "selected_source_types": [
+          "factual_relation"
+        ]
+      },
+      {
+        "episode_id": "snli-compositional:test:121:positive",
+        "evidence_budget": 11,
+        "seed_file": "snli_semantic_mlp_seed0.json",
+        "selected_source_types": [
+          "factual_relation"
+        ]
+      },
+      {
+        "episode_id": "snli-compositional:test:173:positive",
+        "evidence_budget": 5,
+        "seed_file": "snli_semantic_mlp_seed0.json",
+        "selected_source_types": [
+          "factual_relation"
+        ]
+      },
+      {
+        "episode_id": "snli-compositional:test:182:positive",
+        "evidence_budget": 9,
+        "seed_file": "snli_semantic_mlp_seed0.json",
+        "selected_source_types": [
+          "factual_relation"
+        ]
+      },
+      {
+        "episode_id": "snli-compositional:test:198:positive",
+        "evidence_budget": 9,
+        "seed_file": "snli_semantic_mlp_seed0.json",
+        "selected_source_types": [
+          "factual_relation"
+        ]
+      }
+    ],
+    "false_acceptance:missing_support": [
+      {
+        "episode_id": "snli-compositional:test:6260:positive",
+        "evidence_budget": 10,
+        "seed_file": "snli_semantic_mlp_seed0.json",
+        "selected_source_types": [
+          "factual_relation"
+        ]
+      },
+      {
+        "episode_id": "snli-compositional:test:9399:positive",
+        "evidence_budget": 5,
+        "seed_file": "snli_semantic_mlp_seed0.json",
+        "selected_source_types": [
+          "factual_relation"
+        ]
+      }
+    ],
+    "false_acceptance:style_overfit": [
+      {
+        "episode_id": "snli-compositional:test:6:negative",
+        "evidence_budget": 5,
+        "seed_file": "snli_semantic_mlp_seed0.json",
+        "selected_source_types": [
+          "factual_relation"
+        ]
+      },
+      {
+        "episode_id": "snli-compositional:test:48:negative",
+        "evidence_budget": 6,
+        "seed_file": "snli_semantic_mlp_seed0.json",
+        "selected_source_types": [
+          "factual_relation"
+        ]
+      },
+      {
+        "episode_id": "snli-compositional:test:856:negative",
+        "evidence_budget": 5,
+        "seed_file": "snli_semantic_mlp_seed0.json",
+        "selected_source_types": [
+          "factual_relation"
+        ]
+      },
+      {
+        "episode_id": "snli-compositional:test:1009:negative",
+        "evidence_budget": 11,
+        "seed_file": "snli_semantic_mlp_seed0.json",
+        "selected_source_types": [
+          "factual_relation"
+        ]
+      },
+      {
+        "episode_id": "snli-compositional:test:1195:negative",
+        "evidence_budget": 11,
+        "seed_file": "snli_semantic_mlp_seed0.json",
+        "selected_source_types": [
+          "factual_relation"
+        ]
+      },
+      {
+        "episode_id": "snli-compositional:test:2017:negative",
+        "evidence_budget": 6,
+        "seed_file": "snli_semantic_mlp_seed0.json",
+        "selected_source_types": [
+          "factual_relation"
+        ]
+      },
+      {
+        "episode_id": "snli-compositional:test:3566:negative",
+        "evidence_budget": 10,
+        "seed_file": "snli_semantic_mlp_seed0.json",
+        "selected_source_types": [
+          "factual_relation"
+        ]
+      },
+      {
+        "episode_id": "snli-compositional:test:4186:negative",
+        "evidence_budget": 9,
+        "seed_file": "snli_semantic_mlp_seed0.json",
+        "selected_source_types": [
+          "factual_relation"
+        ]
+      },
+      {
+        "episode_id": "snli-compositional:test:5553:negative",
+        "evidence_budget": 6,
+        "seed_file": "snli_semantic_mlp_seed0.json",
+        "selected_source_types": [
+          "factual_relation"
+        ]
+      },
+      {
+        "episode_id": "snli-compositional:test:6430:negative",
+        "evidence_budget": 6,
+        "seed_file": "snli_semantic_mlp_seed0.json",
+        "selected_source_types": [
+          "factual_relation"
+        ]
+      },
+      {
+        "episode_id": "snli-compositional:test:7276:negative",
+        "evidence_budget": 9,
+        "seed_file": "snli_semantic_mlp_seed0.json",
+        "selected_source_types": [
+          "factual_relation"
+        ]
+      },
+      {
+        "episode_id": "snli-compositional:test:8994:negative",
+        "evidence_budget": 6,
+        "seed_file": "snli_semantic_mlp_seed0.json",
+        "selected_source_types": [
+          "factual_relation"
+        ]
+      }
+    ]
+  },
+  "interpretation": "Selection/calibration and style-overfit dominate this proxy; conflict failures are zero because the released test construction contains no accepted contradictory cases. This is a benchmark limitation, not evidence that conflict handling is solved.",
+  "rates_among_tagged_failures": {
+    "false_abstention:attribution_underconfidence": 0.059466848940533154,
+    "false_abstention:selection_threshold": 0.9275461380724539,
+    "false_acceptance:missing_support": 0.001367053998632946,
+    "false_acceptance:selection_calibration": 0.01161995898838004
+  },
+  "schema_version": "personavoice-language-failure-audit-v1",
+  "status": "measured_replay",
+  "taxonomy": {
+    "false_abstention:attribution_underconfidence": "positive episode rejected with no attribution score at gate",
+    "false_abstention:selection_threshold": "positive episode rejected by the joint threshold",
+    "false_acceptance:missing_support": "accepted positive-style episode without gold support",
+    "false_acceptance:selection_calibration": "accepted negative episode not explained by the typed labels",
+    "false_acceptance:style_overfit": "accepted negative style pair; semantic support exists but style gate is wrong",
+    "false_acceptance:unresolved_conflict": "accepted an episode labelled contradictory"
+  }
+}

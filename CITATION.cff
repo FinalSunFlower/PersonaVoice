@@ -1,33 +1,33 @@
 cff-version: 1.2.0
-title: "PersonaVoice: Plug-in Adapters for Persona-Driven 1-Second Voice Cloning"
-message: "If you use PersonaVoice in your research, please cite it as below."
+title: "PersonaVoice research preprints and reproducible extensions"
+message: "If you use the PersonaVoice research artifacts, please cite the relevant Zenodo preprint."
 type: software
 authors:
-  - alias: PersonaVoice Team
-repository-code: "https://github.com/personavoice/personavoice"
-version: "10.4.8"
-date-released: "2026-06-25"
+  - family-names: Luchang
+    given-names: Jiang
+    email: auroral.sunflower@gmail.com
+    orcid: "https://orcid.org/0009-0004-4579-4243"
+repository-code: "https://github.com/FinalSunFlower/PersonaVoice"
+version: "1.0.0"
+date-released: "2026-08-25"
 license: MIT
 keywords:
-  - voice-cloning
-  - zero-shot-tts
-  - few-shot-voice-cloning
-  - flow-matching
-  - F5-TTS
-  - speech-synthesis
-  - persona-driven-tts
-  - emotional-tts
-  - plug-in-adapter
-  - 1-second-cloning
-  - speaker-embedding
-  - ECAPA-TDNN
-  - orthogonal-decomposition
-  - length-adaptive-generation
-  - FiLM-modulation
+  - provenance-constrained generation
+  - selective prediction
+  - citation attribution
+  - language style
+  - abstention
+  - voice safety
+  - text-to-speech
 preferred-citation:
   type: article
-  title: "PersonaVoice v10.4.8: Plug-in Adapters for Persona-Driven 1-Second Voice Cloning — A Trade-off Analysis of Timbre Fidelity and Text-Alignment Stability in Flow-Matching TTS"
+  title: "Provenance-Constrained Selective Language Style Planning from Sparse Evidence"
   authors:
-    - alias: PersonaVoice Team
+    - family-names: Luchang
+      given-names: Jiang
+      email: auroral.sunflower@gmail.com
+      orcid: "https://orcid.org/0009-0004-4579-4243"
   year: 2026
-  notes: "Work in progress. arXiv preprint to appear."
+  month: 8
+  day: 25
+  notes: "Zenodo preprint, version 1.0.0."
